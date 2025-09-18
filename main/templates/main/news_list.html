@@ -1,0 +1,42 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Новости - DIGITALEM{% endblock %}
+
+{% block content %}
+<section id="news-list-page" class="py-20 bg-gray-50 pt-32 min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold text-digitalem-navy mb-4">Все новости</h2>
+            <p class="text-xl text-gray-600 font-light">Наши достижения, исследования и события</p>
+        </div>
+        <div id="news-list-container" class="space-y-12">
+            {% for news_item in all_news %}
+                <a href="{{ news_item.get_absolute_url }}" class="block bg-white rounded-xl overflow-hidden shadow-lg group hover:shadow-xl transition-shadow">
+                    <div class="flex flex-col lg:flex-row">
+                        {% if news_item.image %}
+                        <div class="lg:w-1/3 flex-shrink-0">
+                            <div class="h-64 lg:h-full bg-cover bg-center" style="background-image: url('{{ news_item.image.url }}')"></div>
+                        </div>
+                        {% endif %}
+                        <div class="p-8 flex flex-col">
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="bg-digitalem-blue/10 text-digitalem-blue text-xs font-semibold px-3 py-1 rounded-full">{{ news_item.category }}</span>
+                                <span class="text-gray-500 text-sm">{{ news_item.published_date|date:"d F Y" }} г.</span>
+                            </div>
+                            <h3 class="text-2xl font-bold text-digitalem-navy mb-4 group-hover:text-digitalem-accent">
+                                {{ news_item.title }}
+                            </h3>
+                            <p class="prose max-w-none text-gray-700 font-light leading-relaxed">
+                                {{ news_item.content|safe|striptags|truncatewords:40 }}
+                            </p>
+                        </div>
+                    </div>
+                </a>
+            {% empty %}
+                <p class="text-center text-gray-600">Новостей пока нет.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

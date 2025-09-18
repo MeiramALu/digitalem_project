@@ -1,0 +1,207 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<section id="home" class="hero-section gradient-bg text-white min-h-screen flex items-center tech-grid relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-10">
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+            <div class="animate-fade-in-up">
+                <div class="mb-6">
+                    <span class="text-4xl md:text-5xl font-extrabold text-white">DIGITALEM</span>
+                    <div class="h-1 w-24 bg-white/30 mt-2"></div>
+                </div>
+                <p class="text-xl md:text-2xl mb-8 text-blue-50 font-light leading-relaxed">
+                    Полный цикл разработки: научные исследования, технические проекты и успешная коммерциализация IT-продуктов
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a href="{% url 'labs' %}" class="bg-white text-digitalem-blue px-8 py-4 rounded-xl font-semibold hover:bg-blue-50 transition-all duration-300 text-center transform hover:scale-105 hover:shadow-lg">
+                        <i class="fas fa-rocket mr-2"></i>Наши проекты
+                    </a>
+                    <a href="#contact" class="border-2 border-white text-white px-8 py-4 rounded-xl font-semibold hover:bg-white hover:text-digitalem-blue transition-all duration-300 text-center">
+                        <i class="fas fa-phone mr-2"></i>Связаться с нами
+                    </a>
+                </div>
+            </div>
+            <div class="lg:col-span-1 hidden lg:block animate-float">
+                <div class="relative">
+                    <div class="w-80 h-80 bg-white/5 rounded-full blur-3xl absolute -top-16 -right-16"></div>
+                    <div class="relative glass-effect rounded-2xl p-8">
+                        <h3 class="text-xl font-semibold text-white mb-2 text-center">О нас</h3>
+                        <div class="space-y-6 mt-6">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 bg-gradient-to-r from-digitalem-light to-digitalem-accent rounded-lg flex items-center justify-center"><i class="fas fa-calendar-alt text-white text-xl"></i></div>
+                                <div>
+                                    <h4 class="font-semibold text-white text-base">5+ лет опыта</h4>
+                                    <p class="text-blue-100 text-sm font-mono">В сфере с 2019 года</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-lg flex items-center justify-center"><i class="fas fa-flask text-white text-xl"></i></div>
+                                <div>
+                                    <h4 class="font-semibold text-white text-base">Научные проекты</h4>
+                                    <p class="text-blue-100 text-sm font-mono">Исследования и разработка</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 bg-gradient-to-r from-purple-400 to-indigo-500 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-rocket text-white text-xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-white text-base">Коммерциализация</h4>
+                                    <p class="text-blue-100 text-sm font-mono">От идеи до продажи</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 bg-gradient-to-r from-orange-400 to-red-500 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-laptop-code text-white text-xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-white text-base">IT специализация</h4>
+                                    <p class="text-blue-100 text-sm font-mono">HPC, ИИ, IoT, Digital Twins</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="projects" class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl section-title text-digitalem-navy mb-4">Направления деятельности</h2>
+            <p class="text-xl text-gray-600 font-light">Инновационные решения, которые меняют будущее</p>
+        </div>
+         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+            <div class="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                <div class="flex items-center mb-5">
+                    <div class="w-14 h-14 bg-gradient-to-br from-digitalem-blue to-digitalem-accent rounded-xl flex items-center justify-center mr-5 shadow-lg">
+                        <i class="fas fa-flask text-white fa-2x"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-gray-800">Научные проекты и разработки</h4>
+                </div>
+                <p class="text-gray-600">
+                    Фундаментальные исследования и разработка новых алгоритмов в области ИИ и IoT.
+                </p>
+            </div>
+            <div class="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                <div class="flex items-center mb-5">
+                    <div class="w-14 h-14 bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl flex items-center justify-center mr-5 shadow-lg">
+                        <i class="fas fa-cogs text-white fa-2x"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-gray-800">Проекты в разработке</h4>
+                </div>
+                <p class="text-gray-600">
+                    Активные проекты на стадии прототипирования и создания MVP (минимально жизнеспособного продукта).
+                </p>
+            </div>
+            <div class="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                <div class="flex items-center mb-5">
+                    <div class="w-14 h-14 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center mr-5 shadow-lg">
+                        <i class="fas fa-rocket text-white fa-2x"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-gray-800">Коммерциализация</h4>
+                </div>
+                <p class="text-gray-600">
+                    Готовые технологии и масштабирование решений для наших клиентов и партнеров.
+                </p>
+            </div>
+        </div>
+        <div class="text-center mt-12">
+            <a href="{% url 'labs' %}"
+               class="bg-digitalem-blue text-white px-8 py-4 rounded-xl font-semibold hover:bg-digitalem-accent transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
+                <i class="fas fa-rocket mr-2"></i>Посмотреть все проекты
+            </a>
+        </div>
+    </div>
+</section>
+<section id="team" class="py-20 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Наша команда</h2>
+            <p class="text-xl text-gray-600">Эксперты с многолетним опытом в IT и инновациях</p>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for member in team %}
+            <a href="{{ member.get_absolute_url }}" class="group block bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 text-center card-shadow">
+                <div class="w-32 h-32 rounded-full flex items-center justify-center mx-auto mb-4 overflow-hidden border-2 border-transparent group-hover:border-digitalem-blue transition-colors">
+                    {% if member.photo %}
+                    <img src="{{ member.photo.url }}" class="w-full h-full object-cover" alt="Фотография {{ member.name }}">
+                    {% endif %}
+                </div>
+                <h3 class="text-xl font-bold text-digitalem-navy group-hover:text-digitalem-accent transition-colors">{{ member.name }}</h3>
+                <p class="text-gray-500 mt-1">{{ member.position }}</p>
+            </a>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-12">
+            <a href="{% url 'team_list' %}" class="bg-digitalem-blue text-white px-8 py-4 rounded-xl font-semibold hover:bg-digitalem-accent transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
+                <i class="fas fa-users mr-2"></i>Посмотреть всю команду
+            </a>
+        </div>
+    </div>
+</section>
+<section id="services" class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl section-title text-digitalem-navy mb-4">Наши услуги</h2>
+            <p class="text-xl text-gray-600 font-light">Предоставляем комплексные решения для вашего бизнеса</p>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {% for service in services %}
+            <div class="gradient-bg rounded-2xl p-8 text-white text-center flex flex-col items-center transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 card-shadow">
+                <div class="w-20 h-20 bg-white/10 rounded-xl flex items-center justify-center mb-6 border border-white/20">
+                    <i class="{{ service.icon.icon_class }} text-white text-3xl"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-3 flex-grow">{{ service.title }}</h3>
+                <p class="text-blue-100/90 font-light text-sm">
+                    {{ service.description }}
+                </p>
+            </div>
+            {% empty %}
+                <p class="col-span-full text-center text-gray-500">Раздел с услугами в данный момент наполняется.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+<section id="news" class="py-20 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl section-title text-digitalem-navy mb-4">Последние новости</h2>
+            <p class="text-xl text-gray-600 font-light">Будьте в курсе наших достижений, исследований и событий</p>
+        </div>
+        <div id="news-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 items-start">
+            {% for news_item in latest_news %}
+                <a href="{{ news_item.get_absolute_url }}" class="block bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow group">
+                    {% if news_item.image %}
+                    <div class="h-48 bg-cover bg-center" style="background-image: url('{{ news_item.image.url }}')"></div>
+                    {% endif %}
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="bg-digitalem-blue/10 text-digitalem-blue text-xs font-semibold px-3 py-1 rounded-full">{{ news_item.category }}</span>
+                            <span class="text-gray-500 text-sm">{{ news_item.published_date|date:"d.m.Y" }}</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-digitalem-navy mb-2 group-hover:text-digitalem-accent transition-colors">
+                            {{ news_item.title }}
+                        </h3>
+                        <p class="text-gray-600 text-sm font-light">
+                            {{ news_item.content|safe|striptags|truncatewords:20 }}
+                        </p>
+                    </div>
+                </a>
+            {% empty %}
+                <p class="col-span-full text-center text-gray-600">Новостей пока нет.</p>
+            {% endfor %}
+        </div>
+        {% if latest_news %}
+            <div class="text-center mt-12">
+                <a href="{% url 'news_list' %}" class="bg-digitalem-blue text-white px-8 py-4 rounded-xl font-semibold hover:bg-digitalem-accent transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
+                    <i class="fas fa-newspaper mr-2"></i>Посмотреть все новости
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
