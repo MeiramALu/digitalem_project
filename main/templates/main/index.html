@@ -68,6 +68,7 @@
         </div>
     </div>
 </section>
+
 <section id="projects" class="py-20 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
@@ -117,6 +118,7 @@
         </div>
     </div>
 </section>
+
 <section id="team" class="py-20 bg-gray-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
@@ -128,11 +130,14 @@
             <a href="{{ member.get_absolute_url }}" class="group block bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 text-center card-shadow">
                 <div class="w-32 h-32 rounded-full flex items-center justify-center mx-auto mb-4 overflow-hidden border-2 border-transparent group-hover:border-digitalem-blue transition-colors">
                     {% if member.photo %}
-                    <img src="{{ member.photo.url }}" class="w-full h-full object-cover" alt="Фотография {{ member.name }}">
+                    {# Используем name_ru для alt текста #}
+                    <img src="{{ member.photo.url }}" class="w-full h-full object-cover" alt="Фотография {{ member.name_ru }}">
                     {% endif %}
                 </div>
-                <h3 class="text-xl font-bold text-digitalem-navy group-hover:text-digitalem-accent transition-colors">{{ member.name }}</h3>
-                <p class="text-gray-500 mt-1">{{ member.position }}</p>
+                {# ИЗМЕНЕНО: name -> name_ru #}
+                <h3 class="text-xl font-bold text-digitalem-navy group-hover:text-digitalem-accent transition-colors">{{ member.name_ru }}</h3>
+                {# ИЗМЕНЕНО: position -> position_ru #}
+                <p class="text-gray-500 mt-1">{{ member.position_ru }}</p>
             </a>
             {% endfor %}
         </div>
@@ -143,6 +148,7 @@
         </div>
     </div>
 </section>
+
 <section id="services" class="py-20 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
@@ -153,11 +159,14 @@
             {% for service in services %}
             <div class="gradient-bg rounded-2xl p-8 text-white text-center flex flex-col items-center transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 card-shadow">
                 <div class="w-20 h-20 bg-white/10 rounded-xl flex items-center justify-center mb-6 border border-white/20">
-                    <i class="{{ service.icon.icon_class }} text-white text-3xl"></i>
+                    {# ИЗМЕНЕНО: service.icon.icon_class -> service.icon_class #}
+                    <i class="{{ service.icon_class }} text-white text-3xl"></i>
                 </div>
-                <h3 class="text-xl font-bold mb-3 flex-grow">{{ service.title }}</h3>
+                {# ИЗМЕНЕНО: title -> title_ru #}
+                <h3 class="text-xl font-bold mb-3 flex-grow">{{ service.title_ru }}</h3>
+                {# ИЗМЕНЕНО: description -> description_ru #}
                 <p class="text-blue-100/90 font-light text-sm">
-                    {{ service.description }}
+                    {{ service.description_ru }}
                 </p>
             </div>
             {% empty %}
@@ -166,6 +175,7 @@
         </div>
     </div>
 </section>
+
 <section id="news" class="py-20 bg-gray-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
@@ -183,11 +193,13 @@
                             <span class="bg-digitalem-blue/10 text-digitalem-blue text-xs font-semibold px-3 py-1 rounded-full">{{ news_item.category }}</span>
                             <span class="text-gray-500 text-sm">{{ news_item.published_date|date:"d.m.Y" }}</span>
                         </div>
+                        {# ИЗМЕНЕНО: title -> title_ru #}
                         <h3 class="text-lg font-bold text-digitalem-navy mb-2 group-hover:text-digitalem-accent transition-colors">
-                            {{ news_item.title }}
+                            {{ news_item.title_ru }}
                         </h3>
+                        {# ИЗМЕНЕНО: content -> content_ru #}
                         <p class="text-gray-600 text-sm font-light">
-                            {{ news_item.content|safe|striptags|truncatewords:20 }}
+                            {{ news_item.content_ru|safe|striptags|truncatewords:20 }}
                         </p>
                     </div>
                 </a>

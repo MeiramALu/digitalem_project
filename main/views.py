@@ -1,5 +1,3 @@
-# main/views.py
-
 import asyncio
 import telegram
 from django.shortcuts import render, get_object_or_404
@@ -7,8 +5,9 @@ from .models import TeamMember, Project, News, Service
 from django.http import JsonResponse
 from django.conf import settings
 
+
 def index(request):
-    team_members = TeamMember.objects.all()[:6]
+    team_members = TeamMember.objects.filter(is_visible=True)[:6]
     latest_news = News.objects.all()[:3]
     services = Service.objects.all()[:4]
     context = {
@@ -20,7 +19,7 @@ def index(request):
 
 
 def team_list(request):
-    all_team_members = TeamMember.objects.all()
+    all_team_members = TeamMember.objects.filter(is_visible=True)
     context = {
         'all_team': all_team_members
     }
@@ -48,7 +47,9 @@ def project_list(request, category_slug):
 
 def project_detail(request, slug):
     project = get_object_or_404(Project, slug=slug)
-    team_members = project.team.all()
+
+    team_members = project.team.filter(is_visible=True)
+
     keywords_list = []
     if project.keywords:
         keywords_list = [keyword.strip() for keyword in project.keywords.split(',')]
@@ -77,6 +78,7 @@ def news_list(request):
     }
     return render(request, 'main/news_list.html', context)
 
+
 def news_detail(request, slug):
     news_item = get_object_or_404(News, slug=slug)
     keywords_list = []
@@ -87,6 +89,7 @@ def news_detail(request, slug):
         'keywords_list': keywords_list
     }
     return render(request, 'main/news_detail.html', context)
+
 
 def send_telegram_message(request):
     if request.method == 'POST':
@@ -119,7 +122,6 @@ def send_telegram_message(request):
                 )
                 return JsonResponse({'success': True})
             except telegram.error.TelegramError as e:
-
                 return JsonResponse({'success': False, 'error': f'Ошибка Telegram: {e.message}'})
 
         return asyncio.run(send())

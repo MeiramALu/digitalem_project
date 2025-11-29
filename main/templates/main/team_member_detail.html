@@ -1,23 +1,29 @@
 {% extends 'main/base.html' %}
 {% load static %}
+{% load i18n %}
+
+{% block title %}{{ member.name_ru }} - DIGITALEM{% endblock %}
 
 {% block content %}
 <section class="py-20 bg-gray-50 pt-32 min-h-screen">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid md:grid-cols-12 gap-8 gradient-bg rounded-2xl p-8 md:p-12 text-white card-shadow">
+
             <div class="md:col-span-4 text-center">
-                <div class="w-48 h-48 rounded-full flex items-center justify-center mx-auto mb-6 overflow-hidden shadow-xl">
+                <div class="w-48 h-48 rounded-full flex items-center justify-center mx-auto mb-6 overflow-hidden shadow-xl border-4 border-white/10">
                     {% if member.photo %}
-                    <img src="{{ member.photo.url }}" class="w-full h-full object-cover bg-transparent" alt="{{ member.name }}">
+                    {# ИЗМЕНЕНО: name -> name_ru #}
+                    <img src="{{ member.photo.url }}" class="w-full h-full object-cover bg-transparent" alt="{{ member.name_ru }}">
                     {% endif %}
                 </div>
-                <h2 class="text-3xl font-bold mb-1 logo-text">{{ member.name }}</h2>
-                <p class="text-xl text-blue-100/90 font-light mb-6">{{ member.position }}</p>
+
+                <h2 class="text-3xl font-bold mb-1 logo-text">{{ member.name_ru }}</h2>
+                <p class="text-xl text-blue-100/90 font-light mb-6">{{ member.position_ru }}</p>
 
                 <div class="space-y-4">
                     <div class="flex justify-center space-x-4">
                         {% for link in member.social_links.all %}
-                        <a href="{{ link.url }}" target="_blank" class="text-white/70 hover:text-white transition-colors text-2xl">
+                        <a href="{{ link.url }}" target="_blank" class="text-white/70 hover:text-white transition-colors text-2xl transform hover:scale-110">
                             <i class="{{ link.icon_class }}"></i>
                         </a>
                         {% endfor %}
@@ -38,38 +44,36 @@
 
                 {% if projects %}
                 <div class="mt-10 text-left">
-                    <h3 class="text-xl font-bold text-white mb-4 text-center">Участие в проектах</h3>
+                    <h3 class="text-xl font-bold text-white mb-4 text-center">{% trans "Участие в проектах" %}</h3>
                     <div class="space-y-3">
                         {% for project in projects %}
                         <a href="{{ project.get_absolute_url }}" class="block bg-white/10 p-3 rounded-lg hover:bg-white/20 transition-all">
-                            <p class="font-semibold text-white text-center">{{ project.title }}</p>
+                            <p class="font-semibold text-white text-center">{{ project.title_ru }}</p>
                         </a>
                         {% endfor %}
                     </div>
                 </div>
                 {% endif %}
             </div>
-
             <div class="md:col-span-8 space-y-10">
                 <div class="bg-white/10 rounded-xl p-6 backdrop-blur-sm">
-                    <h3 class="text-2xl font-bold text-white mb-4">Биография</h3>
+                    <h3 class="text-2xl font-bold text-white mb-4">{% trans "Биография" %}</h3>
                     <div class="prose prose-invert max-w-none text-white/90 font-light leading-relaxed">
-                        {{ member.bio|safe }}
+                        {{ member.bio_ru|safe }}
                     </div>
                 </div>
 
                 {% if member.publications.all %}
                 <div class="bg-white/10 rounded-xl p-6 backdrop-blur-sm">
-                    <h3 class="text-2xl font-bold text-white mb-4">Статьи и публикации</h3>
+                    <h3 class="text-2xl font-bold text-white mb-4">{% trans "Статьи и публикации" %}</h3>
                     <div class="space-y-6">
                         {% for pub in member.publications.all %}
-                        <div class="bg-white/5 rounded-lg p-4">
-                            <h4 class="font-semibold text-lg text-white">{{ pub.title }}</h4>
+                        <div class="bg-white/5 rounded-lg p-4 hover:bg-white/10 transition-colors">
+                            <h4 class="font-semibold text-lg text-white">{{ pub.title_ru }}</h4>
                             <p class="text-sm text-blue-100/80 mt-1">{{ pub.publication_date|date:"d.m.Y" }}</p>
-
-                            {% if pub.description %}
-                            <div class="prose prose-invert max-w-none text-white/90 font-light leading-relaxed mt-3">
-                                {{ pub.description|safe }}
+                            {% if pub.description_ru %}
+                            <div class="prose prose-invert max-w-none text-white/90 font-light leading-relaxed mt-3 text-sm">
+                                {{ pub.description_ru|safe }}
                             </div>
                             {% endif %}
 

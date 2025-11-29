@@ -1,28 +1,28 @@
 <!DOCTYPE html>
 {% load static %}
-<html lang="ru">
+{% load i18n %}
+
+{% get_current_language as LANGUAGE_CODE %}
+
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
-    <title>DIGITALEM - Разработка IT-продуктов, IoT и машинное обучение в Алматы</title>
+    <title>DIGITALEM - {% trans "Разработка IT-продуктов, IoT и машинное обучение" %}</title>
     <meta charset="UTF-8">
     <meta name="author" content="DIGITALEM">
-    <meta name="language" content="Russian">
-    <meta name="revisit-after" content="7 days">
-    <meta name="robots" content="index, follow">
+    <meta name="language" content="{{ LANGUAGE_CODE }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="DIGITALEM - полный цикл разработки IT-продуктов: научные исследования, технические проекты и коммерциализация. Специализируемся на машинном обучении, IoT, цифровых двойниках. Проект iQuat - интеллектуальная система управления микроклиматом зданий.">
-    <meta name="keywords"
-        content="DIGITALEM, Казахстан, Алматы, IT разработка, машинное обучение, IoT, цифровые двойники, iQuat, умные здания, автоматизация HVAC, энергосбережение, научные исследования, коммерциализация технологий, Алматы, Казахстан">
+    <meta name="description" content="{% trans 'DIGITALEM - полный цикл разработки IT-продуктов: научные исследования, технические проекты и коммерциализация.' %}">
+
     <link rel="canonical" href="https://digitalem.kz/">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="icon" type="image/png" href="{% static 'logo/logo_tab_white.png' %}">
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+
     <script>
         tailwind.config = {
             theme: {
@@ -49,8 +49,23 @@
             }
         }
     </script>
+    <style>
+        .lang-select {
+            background-color: transparent;
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 0.5rem;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+            cursor: pointer;
+        }
+        .lang-select option {
+            background-color: #0F2844;
+            color: white;
+        }
+    </style>
 </head>
-<body class="bg-white">
+<body class="bg-white flex flex-col min-h-screen">
     <nav id="navbar" class="fixed w-full z-50 gradient-bg transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
@@ -64,14 +79,31 @@
                              class="h-8 w-auto transition-all duration-300">
                     </a>
                 </div>
-                <div class="hidden md:flex items-baseline space-x-8">
-                    <a href="{% url 'index' %}" class="nav-link text-white hover:text-blue-200">Главная</a>
-                    <a href="{% url 'labs' %}" class="nav-link text-white hover:text-blue-200">Проекты</a>
-                    <a href="/#team" class="nav-link text-white hover:text-blue-200">Команда</a>
-                    <a href="/#services" class="nav-link text-white hover:text-blue-200">Услуги</a>
-                    <a href="/#news" class="nav-link text-white hover:text-blue-200">Новости</a>
-                    <a href="#contact" class="nav-link text-white hover:text-blue-200">Контакты</a>
+
+                <div class="hidden md:flex items-center space-x-8">
+                    {# Используем тег trans для перевода меню #}
+                    <a href="{% url 'index' %}" class="nav-link text-white hover:text-blue-200">{% trans "Главная" %}</a>
+                    <a href="{% url 'labs' %}" class="nav-link text-white hover:text-blue-200">{% trans "Проекты" %}</a>
+                    <a href="/#team" class="nav-link text-white hover:text-blue-200">{% trans "Команда" %}</a>
+                    <a href="/#services" class="nav-link text-white hover:text-blue-200">{% trans "Услуги" %}</a>
+                    <a href="/#news" class="nav-link text-white hover:text-blue-200">{% trans "Новости" %}</a>
+                    <a href="#contact" class="nav-link text-white hover:text-blue-200">{% trans "Контакты" %}</a>
+
+                    <form action="{% url 'set_language' %}" method="post" class="ml-4">
+                        {% csrf_token %}
+                        <input name="next" type="hidden" value="{{ redirect_to }}">
+                        <select name="language" class="lang-select" onchange="this.form.submit()">
+                            {% get_available_languages as LANGUAGES %}
+                            {% get_language_info_list for LANGUAGES as languages %}
+                            {% for language in languages %}
+                                <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
+                                    {{ language.code|upper }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </form>
                 </div>
+
                 <div class="md:hidden flex items-center">
                     <button id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-white focus:outline-none">
                         <i id="mobile-menu-icon" class="fas fa-bars text-2xl"></i>
@@ -80,71 +112,99 @@
             </div>
         </div>
     </nav>
+
     <div id="mobile-menu-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
     <div id="mobile-menu-panel" class="fixed top-0 right-0 h-full w-64 bg-white text-digitalem-navy p-6 z-50 transform translate-x-full transition-transform duration-300 ease-in-out">
         <div class="flex justify-between items-center mb-8">
-            <span class="text-2xl font-bold logo-text text-digitalem-blue">Меню</span>
+            <span class="text-2xl font-bold logo-text text-digitalem-blue">{% trans "Меню" %}</span>
             <button id="mobile-menu-close-button" class="text-2xl text-gray-500 hover:text-digitalem-navy">
                 <i class="fas fa-times"></i>
             </button>
         </div>
         <div class="flex flex-col space-y-4">
-            <a href="{% url 'index' %}" class="mobile-nav-link text-lg hover:text-digitalem-blue">Главная</a>
-            <a href="{% url 'labs' %}" class="mobile-nav-link text-lg hover:text-digitalem-blue">Проекты</a>
-            <a href="/#team" class="mobile-nav-link text-lg hover:text-digitalem-blue">Команда</a>
-            <a href="/#services" class="mobile-nav-link text-lg hover:text-digitalem-blue">Услуги</a>
-            <a href="/#news" class="mobile-nav-link text-lg hover:text-digitalem-blue">Новости</a>
-            <a href="#contact" class="mobile-nav-link text-lg hover:text-digitalem-blue">Контакты</a>
+            <a href="{% url 'index' %}" class="mobile-nav-link text-lg hover:text-digitalem-blue">{% trans "Главная" %}</a>
+            <a href="{% url 'labs' %}" class="mobile-nav-link text-lg hover:text-digitalem-blue">{% trans "Проекты" %}</a>
+            <a href="/#team" class="mobile-nav-link text-lg hover:text-digitalem-blue">{% trans "Команда" %}</a>
+            <a href="/#services" class="mobile-nav-link text-lg hover:text-digitalem-blue">{% trans "Услуги" %}</a>
+            <a href="/#news" class="mobile-nav-link text-lg hover:text-digitalem-blue">{% trans "Новости" %}</a>
+            <a href="#contact" class="mobile-nav-link text-lg hover:text-digitalem-blue">{% trans "Контакты" %}</a>
+            <hr class="border-gray-200 my-4">
+            <div class="pt-2">
+                <p class="text-sm text-gray-500 mb-2">{% trans "Выберите язык" %}:</p>
+                <form action="{% url 'set_language' %}" method="post" class="flex gap-2">
+                    {% csrf_token %}
+                    <input name="next" type="hidden" value="{{ redirect_to }}">
+                    {% get_available_languages as LANGUAGES %}
+                    {% for lang in LANGUAGES %}
+                        <button type="submit" name="language" value="{{ lang.0 }}"
+                                class="px-3 py-1 rounded border {% if lang.0 == LANGUAGE_CODE %}bg-digitalem-blue text-white{% else %}border-gray-300 text-gray-600{% endif %}">
+                            {{ lang.0|upper }}
+                        </button>
+                    {% endfor %}
+                </form>
+            </div>
         </div>
     </div>
-    <main>
+
+    <main class="flex-grow">
         {% block content %}
         {% endblock %}
     </main>
-    <section id="contact" class="py-20 bg-digitalem-navy text-white"> {# <-- ИЗМЕНЕН ФОН #}
+
+    <section id="contact" class="py-20 bg-digitalem-navy text-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl section-title mb-4 text-white">Свяжитесь с нами</h2>
-                <p class="text-xl text-blue-100 font-light">Готовы обсудить ваш проект или задать вопросы?</p>
+                <h2 class="text-3xl md:text-4xl section-title mb-4 text-white">{% trans "Свяжитесь с нами" %}</h2>
+                <p class="text-xl text-blue-100 font-light">{% trans "Готовы обсудить ваш проект или задать вопросы?" %}</p>
             </div>
             <div class="grid lg:grid-cols-2 gap-12">
                 <div>
-                    <h3 class="text-2xl font-bold mb-6 text-white">Контактная информация</h3>
+                    <h3 class="text-2xl font-bold mb-6 text-white">{% trans "Контактная информация" %}</h3>
                     <div class="space-y-6">
+                        {# Адрес #}
                         <div class="flex items-start space-x-4">
                             <div class="w-12 h-12 bg-digitalem-blue rounded-xl flex items-center justify-center flex-shrink-0"><i class="fas fa-map-marker-alt text-white"></i></div>
                             <div>
-                                <h4 class="font-semibold mb-1 text-white">Адрес</h4>
-                                <p class="text-blue-100 font-light">050042, г. Алматы, Ауэзовский район<br>ул. Жандосова, д. 150/1, кв. 76</p>
+                                <h4 class="font-semibold mb-1 text-white">{% trans "Адрес" %}</h4>
+                                <p class="text-blue-100 font-light">{% trans "050042, г. Алматы, Ауэзовский район" %}<br>{% trans "ул. Жандосова, д. 150/1, кв. 76" %}</p>
                             </div>
                         </div>
+                        {# Телефон #}
                         <div class="flex items-start space-x-4">
                             <div class="w-12 h-12 bg-digitalem-blue rounded-xl flex items-center justify-center flex-shrink-0"><i class="fas fa-phone text-white"></i></div>
                             <div>
-                                <h4 class="font-semibold mb-1 text-white">Телефон</h4>
-                                <p class="text-blue-100 font-light">+7 (707) 122-33-39</p>
+                                <h4 class="font-semibold mb-1 text-white">{% trans "Телефон" %}</h4>
+                                <p class="text-blue-100 font-light"><a href="tel:+77071223339" class="hover:text-white transition">+7 (707) 122-33-39</a></p>
+                            </div>
+                        </div>
+                        {# ДОБАВЛЕНО: Email #}
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 bg-digitalem-blue rounded-xl flex items-center justify-center flex-shrink-0"><i class="fas fa-envelope text-white"></i></div>
+                            <div>
+                                <h4 class="font-semibold mb-1 text-white">Email</h4>
+                                <p class="text-blue-100 font-light"><a href="mailto:info@digitalem.kz" class="hover:text-white transition">info@digitalem.kz</a></p>
                             </div>
                         </div>
                         <div class="flex items-start space-x-4">
                             <div class="w-12 h-12 bg-digitalem-blue rounded-xl flex items-center justify-center flex-shrink-0"><i class="fas fa-building text-white"></i></div>
                             <div>
-                                <h4 class="font-semibold mb-1 text-white">Регистрация</h4>
-                                <p class="text-blue-100 font-light">БИН: 190440005438</p>
+                                <h4 class="font-semibold mb-1 text-white">{% trans "Регистрация" %}</h4>
+                                <p class="text-blue-100 font-light">{% trans "БИН" %}: 190440005438</p>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="bg-digitalem-blue/30 rounded-2xl p-8"> {# <-- Стиль формы изменен для соответствия скриншоту #}
-                    <h3 class="text-2xl font-bold mb-6 text-white">Отправить сообщение</h3>
+                <div class="bg-digitalem-blue/30 rounded-2xl p-8 backdrop-blur-sm">
+                    <h3 class="text-2xl font-bold mb-6 text-white">{% trans "Отправить сообщение" %}</h3>
                     <form id="contact-form" class="space-y-6">
                         <div class="grid md:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-sm font-medium mb-2 text-white">Имя *</label>
-                                <input type="text" name="name" required class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-blue-200 focus:outline-none focus:border-digitalem-light focus:ring-2 focus:ring-digitalem-light/20 transition-all" placeholder="Ваше имя">
+                                <label class="block text-sm font-medium mb-2 text-white">{% trans "Имя" %} *</label>
+                                <input type="text" name="name" required class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-blue-200 focus:outline-none focus:border-digitalem-light focus:ring-2 focus:ring-digitalem-light/20 transition-all" placeholder="{% trans 'Ваше имя' %}">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium mb-2 text-white">Телефон</label>
-                                <input type="tel" name="phone" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-blue-200 focus:outline-none focus:border-digitalem-light focus:ring-2 focus:ring-digitalem-light/20 transition-all" placeholder="+7 () __--">
+                                <label class="block text-sm font-medium mb-2 text-white">{% trans "Телефон" %}</label>
+                                <input type="tel" name="phone" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-blue-200 focus:outline-none focus:border-digitalem-light focus:ring-2 focus:ring-digitalem-light/20 transition-all" placeholder="+7 (___) ___-__-__">
                             </div>
                         </div>
                         <div>
@@ -152,38 +212,35 @@
                             <input type="email" name="email" required class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-blue-200 focus:outline-none focus:border-digitalem-light focus:ring-2 focus:ring-digitalem-light/20 transition-all" placeholder="your@email.com">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium mb-2 text-white">Тема *</label>
-                            <select name="subject" required class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white focus:outline-none focus:border-digitalem-light focus:ring-2 focus:ring-digitalem-light/20 transition-all">
-                                <option value="" class="bg-digitalem-navy text-white">Выберите тему</option>
-                                <option value="iquat" class="bg-digitalem-navy text-white">Проект iQuat</option>
-                                <option value="ilearn" class="bg-digitalem-navy text-white">Проект iLearn</option>
-                                <option value="collaboration" class="bg-digitalem-navy text-white">Сотрудничество</option>
-                                <option value="investment" class="bg-digitalem-navy text-white">Инвестиции</option>
-                                <option value="other" class="bg-digitalem-navy text-white">Другое</option>
-                            </select>
+                            <label class="block text-sm font-medium mb-2 text-white">{% trans "Тема" %} *</label>
+                            <input type="text" name="subject" required
+                                   class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-blue-200 focus:outline-none focus:border-digitalem-light focus:ring-2 focus:ring-digitalem-light/20 transition-all"
+                                   placeholder="{% trans 'Тема сообщения' %}">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium mb-2 text-white">Сообщение *</label>
-                            <textarea name="message" rows="4" required class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-blue-200 focus:outline-none focus:border-digitalem-light focus:ring-2 focus:ring-digitalem-light/20 transition-all resize-none" placeholder="Расскажите о вашем проекте или вопросе..."></textarea>
+                            <label class="block text-sm font-medium mb-2 text-white">{% trans "Сообщение" %} *</label>
+                            <textarea name="message" rows="4" required class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-blue-200 focus:outline-none focus:border-digitalem-light focus:ring-2 focus:ring-digitalem-light/20 transition-all resize-none" placeholder="{% trans 'Расскажите о вашем проекте или вопросе...' %}"></textarea>
                         </div>
-                        <button type="submit" class="w-full bg-digitalem-blue hover:bg-digitalem-light text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105">
+                        <button type="submit" class="w-full bg-digitalem-blue hover:bg-digitalem-light text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg">
                             <i class="fas fa-paper-plane mr-2"></i>
-                            <span class="submit-text">Отправить сообщение</span>
+                            <span class="submit-text">{% trans "Отправить сообщение" %}</span>
                         </button>
                     </form>
                 </div>
             </div>
         </div>
     </section>
-    <footer class="bg-gray-900 text-white py-8">
+
+    <footer class="bg-gray-900 text-white py-8 mt-auto">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center">
                 <p class="text-gray-400 font-light">
-                    &copy; 2025 ТОО "DIGITALEM". Все права защищены. БИН: 190440005438
+                    &copy; {% now "Y" %} ТОО "DIGITALEM". {% trans "Все права защищены." %} {% trans "БИН" %}: 190440005438
                 </p>
             </div>
         </div>
     </footer>
+
     <script src="{% static 'js/script.js' %}"></script>
     {% block scripts %}
     {% endblock %}
