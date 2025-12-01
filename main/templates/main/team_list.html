@@ -18,11 +18,11 @@
             <a href="{{ member.get_absolute_url }}" class="group block bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 text-center">
                 <div class="w-32 h-32 rounded-full flex items-center justify-center mx-auto mb-4 overflow-hidden border-2 border-transparent group-hover:border-digitalem-blue transition-colors">
                     {% if member.photo %}
-                    <img src="{{ member.photo.url }}" class="w-full h-full object-cover" alt="{% trans 'Фотография' %} {{ member.name_ru }}">
+                    <img src="{{ member.photo.url }}" class="w-full h-full object-cover" alt="{% trans 'Фотография' %} {{ member.name }}">
                     {% endif %}
                 </div>
-                <h3 class="text-xl font-bold text-digitalem-navy group-hover:text-digitalem-accent transition-colors">{{ member.name_ru }}</h3>
-                <p class="text-gray-500 mt-1">{{ member.position_ru }}</p>
+                <h3 class="text-xl font-bold text-digitalem-navy group-hover:text-digitalem-accent transition-colors">{{ member.name }}</h3>
+                <p class="text-gray-500 mt-1">{{ member.position }}</p>
             </a>
             {% empty %}
             <p class="text-center col-span-full text-gray-600">{% trans "Информация о команде скоро появится." %}</p>

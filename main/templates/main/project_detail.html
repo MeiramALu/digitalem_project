@@ -1,5 +1,6 @@
 {% extends 'main/base.html' %}
 {% load static %}
+{% load i18n %}
 
 {% block content %}
 
@@ -9,10 +10,8 @@
         <div class="gradient-bg rounded-2xl p-8 md:p-12 text-white card-shadow">
             <div class="grid lg:grid-cols-5 gap-12 items-start">
 
-                {# --- Левая колонка (Описание) --- #}
                 <div class="lg:col-span-3">
                     <div class="flex items-center mb-6">
-                        {# Обратите внимание: используем поля, актуальные для вашей модели. Если вы уже перешли на _ru, замените .status_tag_1 на .status_tag_1_ru #}
                         {% if project.status_tag_1 %}<span class="bg-white/20 px-4 py-2 rounded-full text-sm font-medium mr-4 backdrop-blur-sm">{{ project.status_tag_1 }}</span>{% endif %}
                         {% if project.status_tag_2 %}<span class="bg-emerald-500/90 px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm">{{ project.status_tag_2 }}</span>{% endif %}
                     </div>
@@ -26,7 +25,6 @@
                     <div class="space-y-4 mb-8 border-l-2 border-white/20 pl-4">
                         {% for feature in project.features.all %}
                         <div class="flex items-center space-x-3 opacity-90">
-                            {# ИЗМЕНЕНО: feature.icon_class вместо feature.icon.icon_class #}
                             <i class="{{ feature.icon_class }} text-blue-200 fa-fw"></i>
                             <span class="font-light">{{ feature.text }}</span>
                         </div>
@@ -37,31 +35,29 @@
                         {% if project.external_link %}
                             <a href="{{ project.external_link }}" target="_blank" class="bg-white text-digitalem-blue px-6 py-3 rounded-xl font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 inline-flex items-center justify-center">
                                 <i class="fas fa-external-link-alt mr-2"></i>
-                                <span>Перейти</span>
+                                <span>{% trans "Перейти" %}</span>
                             </a>
                         {% endif %}
 
                         {% if project.detailed_info %}
                             <button id="show-details-btn" type="button" class="border-2 border-white text-white px-6 py-3 rounded-xl font-semibold hover:bg-white hover:text-digitalem-blue transition-all duration-300 inline-flex items-center justify-center">
                                 <i class="fas fa-info-circle mr-2"></i>
-                                <span>Подробнее</span>
+                                <span>{% trans "Подробнее" %}</span>
                             </button>
                         {% endif %}
                     </div>
                 </div>
 
-                {# --- Правая колонка (Стек и Теги) --- #}
                 <div class="lg:col-span-2">
                     {% if project.tech_stack.all or project.keywords %}
                     <div class="glass-effect rounded-2xl p-6">
                         {% if project.tech_stack.all %}
                         <div>
-                            <h4 class="text-xl font-semibold mb-6 text-center">Технологический стек</h4>
+                            <h4 class="text-xl font-semibold mb-6 text-center">{% trans "Технологический стек" %}</h4>
                             <div class="grid grid-cols-2 gap-4">
                                 {% for tech_item in project.tech_stack.all %}
                                 <div class="bg-white/10 rounded-xl p-4 text-center backdrop-blur-sm hover:bg-white/20 transition-all duration-300 group">
-                                    {# ИЗМЕНЕНО: tech_item.icon_class вместо tech_item.icon.icon_class #}
-                                    <i class="{{ tech_item.icon_class }} text-3xl mb-2 text-blue-200 group-hover:scale-110 transition-transform"></i>
+                                    <i class="{{ tech_item.icon.icon_class }} text-3xl mb-2 text-blue-200 group-hover:scale-110 transition-transform"></i>
                                     <div class="text-sm font-mono mt-2">{{ tech_item.text }}</div>
                                 </div>
                                 {% endfor %}
@@ -71,7 +67,7 @@
 
                         {% if project.keywords %}
                         <div class="{% if project.tech_stack.all %}mt-6{% endif %}">
-                            <h4 class="text-lg font-semibold mb-3 text-center">Ключевые слова</h4>
+                            <h4 class="text-lg font-semibold mb-3 text-center">{% trans "Ключевые слова" %}</h4>
                             <div class="flex flex-wrap gap-2 justify-center">
                                 {% for keyword in keywords_list %}
                                     <span class="bg-white/10 text-xs font-medium px-3 py-1 rounded-full">{{ keyword }}</span>
@@ -85,13 +81,12 @@
             </div>
         </div>
 
-        {# --- Скрытый блок "Подробнее" --- #}
         {% if project.detailed_info %}
         <div id="detailed-info-block" class="hidden mt-12">
             <div class="gradient-bg rounded-2xl p-8 md:p-12 text-white card-shadow">
                 <div class="relative glass-effect rounded-2xl p-8">
                     <div class="flex justify-between items-center mb-6">
-                        <h3 class="text-3xl font-bold logo-text">Дополнительная информация</h3>
+                        <h3 class="text-3xl font-bold logo-text">{% trans "Дополнительная информация" %}</h3>
                         <button id="hide-details-btn" type="button" class="text-white/70 hover:text-white transition-colors">
                             <i class="fas fa-times fa-2x"></i>
                         </button>
@@ -107,12 +102,11 @@
     </div>
 </section>
 
-{# --- Секция Команда --- #}
 <section id="team" class="py-20 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Команда проекта</h2>
-            <p class="text-xl text-gray-600">Эксперты, которые работали над этим решением</p>
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{% trans "Команда проекта" %}</h2>
+            <p class="text-xl text-gray-600">{% trans "Эксперты, которые работали над этим решением" %}</p>
         </div>
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {% for member in team_members %}
@@ -126,19 +120,18 @@
                 <p class="text-gray-500 mt-1">{{ member.position }}</p>
             </a>
             {% empty %}
-            <p class="text-center col-span-full text-gray-600">Информация о команде проекта скоро появится.</p>
+            <p class="text-center col-span-full text-gray-600">{% trans "Информация о команде проекта скоро появится." %}</p>
             {% endfor %}
         </div>
     </div>
 </section>
 
-{# --- Секция Задача --- #}
 {% if project.task_description %}
 <section id="task" class="py-20 bg-gray-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="gradient-bg rounded-2xl p-8 md:p-12 text-white">
             <div class="text-center mb-10">
-                <h2 class="text-3xl md:text-4xl font-bold">Задача проекта</h2>
+                <h2 class="text-3xl md:text-4xl font-bold">{% trans "Задача проекта" %}</h2>
                 {% if project.task_subtitle %}
                 <p class="mt-2 text-lg text-blue-200">{{ project.task_subtitle }}</p>
                 {% endif %}
@@ -153,13 +146,12 @@
 </section>
 {% endif %}
 
-{# --- Секция Результаты --- #}
 {% if project.result_description or project.result_images.all %}
 <section id="results" class="py-20 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="gradient-bg rounded-2xl p-8 md:p-12 text-white">
             <div class="text-center mb-10">
-                <h2 class="text-3xl md:text-4xl font-bold">Результаты проекта</h2>
+                <h2 class="text-3xl md:text-4xl font-bold">{% trans "Результаты проекта" %}</h2>
             </div>
             <div class="relative glass-effect rounded-xl p-6 md:p-8">
                 {% if project.result_description %}
@@ -188,26 +180,23 @@
 </section>
 {% endif %}
 
-{# --- Секция Публикации и Новости (ОБНОВЛЕННАЯ ЛОГИКА) --- #}
 {% with publications=project.publications.all news=project.news.all %}
 {% if publications or news %}
 <section id="publications" class="py-20 bg-gray-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
-            <h2 class="text-3xl md:text-4xl font-bold text-digitalem-navy mb-4">Материалы проекта</h2>
+            <h2 class="text-3xl md:text-4xl font-bold text-digitalem-navy mb-4">{% trans "Материалы проекта" %}</h2>
             <div class="h-1 w-20 bg-blue-500 mx-auto rounded-full"></div>
         </div>
 
-        {# Умная сетка: 2 колонки если есть и то и другое, иначе 1 колонка по центру #}
         <div class="grid grid-cols-1 {% if publications and news %}lg:grid-cols-2{% else %}max-w-4xl mx-auto{% endif %} gap-12 items-start">
 
-            {# --- БЛОК 1: Научные статьи --- #}
             {% if publications %}
             <div class="animate-float h-full">
                 <div class="relative glass-effect rounded-2xl p-8 gradient-bg text-white h-full shadow-xl">
                     <div class="flex items-center justify-center mb-8">
                         <i class="fas fa-book-open text-3xl mr-3 text-blue-200"></i>
-                        <h3 class="text-2xl font-semibold">Научные статьи</h3>
+                        <h3 class="text-2xl font-semibold">{% trans "Научные статьи" %}</h3>
                     </div>
 
                     <div class="space-y-6">
@@ -230,7 +219,7 @@
                             {% if pub.url %}
                             <div class="mt-5 pt-4 border-t border-white/10">
                                  <a href="{{ pub.url }}" target="_blank" class="inline-flex items-center text-sm font-semibold text-blue-200 hover:text-white transition-colors">
-                                    <span>Читать источник</span>
+                                    <span>{% trans "Читать источник" %}</span>
                                     <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i>
                                 </a>
                             </div>
@@ -242,26 +231,25 @@
             </div>
             {% endif %}
 
-            {# --- БЛОК 2: Новости --- #}
             {% if news %}
             <div class="animate-float h-full" {% if publications and news %}style="animation-delay: 0.5s;"{% endif %}>
                  <div class="relative glass-effect rounded-2xl p-8 gradient-bg text-white h-full shadow-xl">
                     <div class="flex items-center justify-center mb-8">
                         <i class="fas fa-newspaper text-3xl mr-3 text-blue-200"></i>
-                        <h3 class="text-2xl font-semibold">Новости проекта</h3>
+                        <h3 class="text-2xl font-semibold">{% trans "Новости проекта" %}</h3>
                     </div>
 
-                    {# Если новостей много и нет публикаций, делаем красивую сетку внутри блока #}
                     <div class="{% if not publications %}grid md:grid-cols-2 gap-6{% else %}space-y-6{% endif %}">
                         {% for news_item in news %}
-                        <a href="{% url 'news_detail' news_item.slug %}" class="block bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group h-full flex flex-col">
+                        <a href="{{ news_item.get_absolute_url }}" class="block bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group h-full flex flex-col">
                             {% if news_item.image %}
                             <div class="h-48 bg-cover bg-center relative overflow-hidden">
                                 <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
                                 <img src="{{ news_item.image.url }}" alt="{{ news_item.title }}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
                                 <div class="absolute top-4 left-4">
                                     <span class="bg-blue-600/90 text-white text-xs font-bold px-3 py-1 rounded-full backdrop-blur-sm shadow-sm">
-                                        {{ news_item.category }}
+                                        {# Используем перевод choices для категории #}
+                                        {% trans news_item.get_category_display %}
                                     </span>
                                 </div>
                             </div>
@@ -279,7 +267,7 @@
                                     {{ news_item.content|safe|striptags|truncatewords:20 }}
                                 </div>
                                 <div class="text-blue-600 text-sm font-semibold mt-auto flex items-center">
-                                    Подробнее <i class="fas fa-chevron-right ml-1 text-xs"></i>
+                                    {% trans "Подробнее" %} <i class="fas fa-chevron-right ml-1 text-xs"></i>
                                 </div>
                             </div>
                         </a>
@@ -300,7 +288,30 @@
 {% block scripts %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
 <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+
 <script>
   Fancybox.bind("[data-fancybox]", {});
+
+  document.addEventListener('DOMContentLoaded', function() {
+      const showDetailsBtn = document.getElementById('show-details-btn');
+      const hideDetailsBtn = document.getElementById('hide-details-btn');
+      const detailedInfoBlock = document.getElementById('detailed-info-block');
+
+      if (showDetailsBtn && detailedInfoBlock) {
+          showDetailsBtn.addEventListener('click', function(e) {
+              e.preventDefault();
+              detailedInfoBlock.classList.remove('hidden');
+              detailedInfoBlock.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          });
+      }
+
+      if (hideDetailsBtn && detailedInfoBlock) {
+          hideDetailsBtn.addEventListener('click', function(e) {
+              e.preventDefault();
+              detailedInfoBlock.classList.add('hidden');
+              showDetailsBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          });
+      }
+  });
 </script>
 {% endblock %}

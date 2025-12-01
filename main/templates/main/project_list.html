@@ -21,25 +21,25 @@
             <div class="grid lg:grid-cols-2 gap-12 items-center">
                 <div>
                     <div class="flex items-center mb-6">
-                        {% if project.status_tag_1_ru %}
-                        <span class="bg-white/20 px-4 py-2 rounded-full text-sm font-medium mr-4 backdrop-blur-sm">{{ project.status_tag_1_ru }}</span>
+                        {% if project.status_tag_1 %}
+                        <span class="bg-white/20 px-4 py-2 rounded-full text-sm font-medium mr-4 backdrop-blur-sm">{{ project.status_tag_1 }}</span>
                         {% endif %}
-                        {% if project.status_tag_2_ru %}
-                        <span class="bg-emerald-500/90 px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm">{{ project.status_tag_2_ru }}</span>
+                        {% if project.status_tag_2 %}
+                        <span class="bg-emerald-500/90 px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm">{{ project.status_tag_2 }}</span>
                         {% endif %}
                     </div>
 
-                    <h3 class="text-3xl md:text-4xl font-bold mb-6 logo-text">{{ project.title_ru }}</h3>
+                    <h3 class="text-3xl md:text-4xl font-bold mb-6 logo-text">{{ project.title }}</h3>
 
                     <p class="text-xl mb-6 text-blue-50 font-light leading-relaxed">
-                        {{ project.tagline_ru }}
+                        {{ project.tagline }}
                     </p>
 
                     <div class="space-y-3 my-8 border-l-2 border-white/20 pl-4">
                         {% for feature in project.features.all|slice:":2" %}
                         <div class="flex items-center space-x-3 opacity-90">
                             <i class="{{ feature.icon_class }} text-blue-200 fa-fw"></i>
-                            <span class="font-light">{{ feature.text_ru }}</span>
+                            <span class="font-light">{{ feature.text }}</span>
                         </div>
                         {% endfor %}
                     </div>

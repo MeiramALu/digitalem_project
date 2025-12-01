@@ -28,11 +28,11 @@
                             </div>
 
                             <h3 class="text-2xl font-bold text-digitalem-navy mb-4 group-hover:text-digitalem-accent">
-                                {{ news_item.title_ru }}
+                                {{ news_item.title }}
                             </h3>
 
                             <p class="prose max-w-none text-gray-700 font-light leading-relaxed">
-                                {{ news_item.content_ru|safe|striptags|truncatewords:40 }}
+                                {{ news_item.content|safe|striptags|truncatewords:40 }}
                             </p>
                         </div>
                     </div>

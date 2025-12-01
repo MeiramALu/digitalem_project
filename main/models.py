@@ -1,18 +1,25 @@
 from django.db import models
 from django.urls import reverse
 from ckeditor_uploader.fields import RichTextUploadingField
+from django.utils.translation import get_language
 
 
-# --- Вспомогательные функции ---
+class TranslatableModel(models.Model):
+    class Meta:
+        abstract = True
 
-class Publication(models.Model):
-    member = models.ForeignKey(
-        'TeamMember',
-        related_name='publications',
-        on_delete=models.CASCADE,
-        verbose_name="Сотрудник"
-    )
-    # Трехъязычные заголовки
+    def get_tr(self, field_prefix):
+        lang = get_language()
+        val = getattr(self, f"{field_prefix}_{lang}", None)
+        if not val:
+            val = getattr(self, f"{field_prefix}_ru", None)
+        return val
+
+
+class Publication(TranslatableModel):
+    member = models.ForeignKey('TeamMember', related_name='publications', on_delete=models.CASCADE,
+                               verbose_name="Сотрудник")
+
     title_ru = models.CharField(max_length=255, verbose_name="Название статьи (RU)")
     title_kk = models.CharField(max_length=255, verbose_name="Название статьи (KK)", blank=True)
     title_en = models.CharField(max_length=255, verbose_name="Название статьи (EN)", blank=True)
@@ -20,23 +27,21 @@ class Publication(models.Model):
     source = models.CharField(max_length=200, verbose_name="Журнал или источник")
     publication_date = models.DateField(verbose_name="Дата публикации")
 
-    # Трехъязычное описание
     description_ru = RichTextUploadingField(verbose_name="Краткое описание (RU)", blank=True)
     description_kk = RichTextUploadingField(verbose_name="Краткое описание (KK)", blank=True)
     description_en = RichTextUploadingField(verbose_name="Краткое описание (EN)", blank=True)
 
     url = models.URLField(verbose_name="Ссылка на публикацию", blank=True)
+    project = models.ForeignKey('Project', related_name='publications', on_delete=models.SET_NULL, null=True,
+                                blank=True, verbose_name="Связанный проект")
 
-    project = models.ForeignKey(
-        'Project',
-        related_name='publications',
-        on_delete=models.SET_NULL,
-        null=True, blank=True,
-        verbose_name="Связанный проект"
-    )
+    @property
+    def title(self): return self.get_tr('title')
 
-    def __str__(self):
-        return self.title_ru
+    @property
+    def description(self): return self.get_tr('description')
+
+    def __str__(self): return self.title_ru
 
     class Meta:
         verbose_name = "Публикация"
@@ -44,14 +49,14 @@ class Publication(models.Model):
         ordering = ['-publication_date', 'title_ru']
 
 
-class TeamMember(models.Model):
+class TeamMember(TranslatableModel):
+    is_visible = models.BooleanField(default=True, verbose_name="Отображать на сайте?")
+
     name_ru = models.CharField(max_length=100, verbose_name="Имя и Фамилия (RU)")
     name_kk = models.CharField(max_length=100, verbose_name="Имя и Фамилия (KK)", blank=True)
     name_en = models.CharField(max_length=100, verbose_name="Имя и Фамилия (EN)", blank=True)
 
-    is_visible = models.BooleanField(default=True, verbose_name="Отображать на сайте?")
-
-    slug = models.SlugField(max_length=100, unique=True, verbose_name="URL-адрес (слаг)")
+    slug = models.SlugField(max_length=100, unique=True)
 
     position_ru = models.CharField(max_length=100, verbose_name="Должность (RU)", blank=True)
     position_kk = models.CharField(max_length=100, verbose_name="Должность (KK)", blank=True)
@@ -65,85 +70,70 @@ class TeamMember(models.Model):
     scopus_id = models.CharField(max_length=50, blank=True, verbose_name="Scopus Author ID")
     orcid_id = models.CharField(max_length=50, blank=True, verbose_name="ORCID iD")
 
-    def __str__(self):
-        return self.name_ru
+    @property
+    def name(self): return self.get_tr('name')
 
-    def get_absolute_url(self):
-        return reverse('team_member_detail', kwargs={'slug': self.slug})
+    @property
+    def position(self): return self.get_tr('position')
 
-    class Meta:
-        verbose_name = "Сотрудник"
-        verbose_name_plural = "Сотрудники"
+    @property
+    def bio(self): return self.get_tr('bio')
+
+    def __str__(self): return self.name_ru
+
+    def get_absolute_url(self): return reverse('team_member_detail', kwargs={'slug': self.slug})
+
+    class Meta: verbose_name = "Сотрудник"; verbose_name_plural = "Сотрудники"
 
 
 class SocialLink(models.Model):
     member = models.ForeignKey(TeamMember, related_name='social_links', on_delete=models.CASCADE)
-    icon_class = models.CharField(max_length=50, verbose_name="CSS класс иконки",
-                                  help_text="Например: 'fab fa-linkedin' или 'bi bi-telegram'")
+    icon_class = models.CharField(max_length=50, verbose_name="CSS класс иконки")
     url = models.URLField(verbose_name="URL-адрес ссылки")
 
-    def __str__(self):
-        return f"{self.member.name_ru} - {self.url}"
+    def __str__(self): return f"{self.member.name_ru} - {self.url}"
 
-    class Meta:
-        verbose_name = "Ссылка на соцсеть"
-        verbose_name_plural = "Ссылки на соцсети"
+    class Meta: verbose_name = "Ссылка на соцсеть"; verbose_name_plural = "Ссылки на соцсети"
 
 
-
-class ProjectFeature(models.Model):
+class ProjectFeature(TranslatableModel):
     project = models.ForeignKey('Project', related_name='features', on_delete=models.CASCADE, verbose_name="Проект")
-    icon_class = models.CharField(max_length=100, verbose_name="CSS класс иконки",
-                                  help_text="Например: 'fas fa-chart-line'")
+    icon_class = models.CharField(max_length=100, verbose_name="CSS класс иконки")
 
     text_ru = models.CharField(max_length=200, verbose_name="Текст особенности (RU)")
     text_kk = models.CharField(max_length=200, verbose_name="Текст особенности (KK)", blank=True)
     text_en = models.CharField(max_length=200, verbose_name="Текст особенности (EN)", blank=True)
+    order = models.PositiveIntegerField(default=0)
 
-    order = models.PositiveIntegerField(default=0, verbose_name="Порядок")
+    @property
+    def text(self): return self.get_tr('text')
 
     def __str__(self): return f"{self.project.title_ru} - {self.text_ru}"
 
-    class Meta:
-        verbose_name = "Особенность проекта"
-        verbose_name_plural = "Особенности проекта"
-        ordering = ['order']
+    class Meta: verbose_name = "Особенность проекта"; verbose_name_plural = "Особенности проекта"; ordering = ['order']
 
 
 class ProjectTechStack(models.Model):
-    project = models.ForeignKey('Project', related_name='tech_stack', on_delete=models.CASCADE, verbose_name="Проект")
-    icon_class = models.CharField(max_length=100, verbose_name="CSS класс иконки",
-                                  help_text="Например: 'fab fa-python'")
-
-    text = models.CharField(max_length=100, verbose_name="Название технологии")
-    order = models.PositiveIntegerField(default=0, verbose_name="Порядок")
+    project = models.ForeignKey('Project', related_name='tech_stack', on_delete=models.CASCADE)
+    icon_class = models.CharField(max_length=100, verbose_name="CSS класс иконки")
+    text = models.CharField(max_length=100, verbose_name="Название технологии")  # Технологии обычно не переводят
+    order = models.PositiveIntegerField(default=0)
 
     def __str__(self): return f"{self.project.title_ru} - {self.text}"
 
-    class Meta:
-        verbose_name = "Технология стека"
-        verbose_name_plural = "Технологический стек"
-        ordering = ['order']
+    class Meta: verbose_name = "Технология стека"; verbose_name_plural = "Технологический стек"; ordering = ['order']
 
 
-class Project(models.Model):
-    CATEGORY_CHOICES = [
-        ('research', 'Научные проекты и разработки'),
-        ('development', 'Коммерциализационные проекты и разработки'),
-        ('commercial', 'Коммерциализация'),
-    ]
-    category = models.CharField(
-        max_length=20,
-        choices=CATEGORY_CHOICES,
-        default='research',
-        verbose_name="Категория"
-    )
+class Project(TranslatableModel):
+    CATEGORY_CHOICES = [('research', 'Научные проекты'), ('development', 'Разработка'),
+                        ('commercial', 'Коммерциализация')]
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='research')
 
-    title_ru = models.CharField(max_length=100, verbose_name="Название проекта (RU)")
-    title_kk = models.CharField(max_length=100, verbose_name="Название проекта (KK)", blank=True)
-    title_en = models.CharField(max_length=100, verbose_name="Название проекта (EN)", blank=True)
+    title_ru = models.CharField(max_length=100, verbose_name="Название (RU)")
+    title_kk = models.CharField(max_length=100, verbose_name="Название (KK)", blank=True)
+    title_en = models.CharField(max_length=100, verbose_name="Название (EN)", blank=True)
 
-    slug = models.SlugField(max_length=100, unique=True, verbose_name="URL-адрес (слаг)")
+    slug = models.SlugField(max_length=100, unique=True)
 
     tagline_ru = models.CharField(max_length=200, verbose_name="Слоган (RU)")
     tagline_kk = models.CharField(max_length=200, verbose_name="Слоган (KK)", blank=True)
@@ -157,118 +147,139 @@ class Project(models.Model):
     status_tag_2_kk = models.CharField(max_length=50, blank=True, verbose_name="Статус 2 (KK)")
     status_tag_2_en = models.CharField(max_length=50, blank=True, verbose_name="Статус 2 (EN)")
 
-    full_description_ru = RichTextUploadingField(verbose_name="Основное описание (RU)")
-    full_description_kk = RichTextUploadingField(verbose_name="Основное описание (KK)", blank=True)
-    full_description_en = RichTextUploadingField(verbose_name="Основное описание (EN)", blank=True)
+    full_description_ru = RichTextUploadingField(verbose_name="Описание (RU)")
+    full_description_kk = RichTextUploadingField(verbose_name="Описание (KK)", blank=True)
+    full_description_en = RichTextUploadingField(verbose_name="Описание (EN)", blank=True)
 
-    external_link = models.URLField(blank=True, null=True, verbose_name="Внешняя ссылка на проект")
-    team = models.ManyToManyField('TeamMember', related_name='projects', verbose_name="Команда проекта")
+    external_link = models.URLField(blank=True, null=True)
+    team = models.ManyToManyField('TeamMember', related_name='projects', verbose_name="Команда")
 
-    task_description_ru = RichTextUploadingField(verbose_name="Задача проекта (RU)", blank=True)
-    task_description_kk = RichTextUploadingField(verbose_name="Задача проекта (KK)", blank=True)
-    task_description_en = RichTextUploadingField(verbose_name="Задача проекта (EN)", blank=True)
+    task_description_ru = RichTextUploadingField(verbose_name="Задача (RU)", blank=True)
+    task_description_kk = RichTextUploadingField(verbose_name="Задача (KK)", blank=True)
+    task_description_en = RichTextUploadingField(verbose_name="Задача (EN)", blank=True)
 
     task_subtitle_ru = models.CharField(max_length=200, blank=True, verbose_name="Подзаголовок задачи (RU)")
     task_subtitle_kk = models.CharField(max_length=200, blank=True, verbose_name="Подзаголовок задачи (KK)")
     task_subtitle_en = models.CharField(max_length=200, blank=True, verbose_name="Подзаголовок задачи (EN)")
 
-    result_description_ru = RichTextUploadingField(verbose_name="Результаты проекта (RU)", blank=True)
-    result_description_kk = RichTextUploadingField(verbose_name="Результаты проекта (KK)", blank=True)
-    result_description_en = RichTextUploadingField(verbose_name="Результаты проекта (EN)", blank=True)
+    result_description_ru = RichTextUploadingField(verbose_name="Результаты (RU)", blank=True)
+    result_description_kk = RichTextUploadingField(verbose_name="Результаты (KK)", blank=True)
+    result_description_en = RichTextUploadingField(verbose_name="Результаты (EN)", blank=True)
 
-    detailed_info_ru = RichTextUploadingField(verbose_name="Доп. информация (RU)", blank=True)
-    detailed_info_kk = RichTextUploadingField(verbose_name="Доп. информация (KK)", blank=True)
-    detailed_info_en = RichTextUploadingField(verbose_name="Доп. информация (EN)", blank=True)
+    detailed_info_ru = RichTextUploadingField(verbose_name="Доп. инфо (RU)", blank=True)
+    detailed_info_kk = RichTextUploadingField(verbose_name="Доп. инфо (KK)", blank=True)
+    detailed_info_en = RichTextUploadingField(verbose_name="Доп. инфо (EN)", blank=True)
 
-    keywords = models.CharField(max_length=200, blank=True, verbose_name="Ключевые слова (SEO)")
+    keywords = models.CharField(max_length=200, blank=True)
 
-    def __str__(self):
-        return self.title_ru
+    @property
+    def title(self): return self.get_tr('title')
 
-    def get_absolute_url(self):
-        return reverse('project_detail', kwargs={'slug': self.slug})
+    @property
+    def tagline(self): return self.get_tr('tagline')
 
-    class Meta:
-        verbose_name = "Проект"
-        verbose_name_plural = "Проекты"
+    @property
+    def status_tag_1(self): return self.get_tr('status_tag_1')
+
+    @property
+    def status_tag_2(self): return self.get_tr('status_tag_2')
+
+    @property
+    def full_description(self): return self.get_tr('full_description')
+
+    @property
+    def task_description(self): return self.get_tr('task_description')
+
+    @property
+    def task_subtitle(self): return self.get_tr('task_subtitle')
+
+    @property
+    def result_description(self): return self.get_tr('result_description')
+
+    @property
+    def detailed_info(self): return self.get_tr('detailed_info')
+
+    def __str__(self): return self.title_ru
+
+    def get_absolute_url(self): return reverse('project_detail', kwargs={'slug': self.slug})
+
+    class Meta: verbose_name = "Проект"; verbose_name_plural = "Проекты"
 
 
-class ProjectResultImage(models.Model):
-    project = models.ForeignKey(
-        Project,
-        related_name='result_images',
-        on_delete=models.CASCADE,
-        verbose_name="Проект"
-    )
-    image = models.ImageField(upload_to='project_results/', verbose_name="Изображение")
+class ProjectResultImage(TranslatableModel):
+    project = models.ForeignKey(Project, related_name='result_images', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='project_results/')
+    caption_ru = models.CharField(max_length=255, blank=True)
+    caption_kk = models.CharField(max_length=255, blank=True)
+    caption_en = models.CharField(max_length=255, blank=True)
 
-    caption_ru = models.CharField(max_length=255, blank=True, verbose_name="Подпись (RU)")
-    caption_kk = models.CharField(max_length=255, blank=True, verbose_name="Подпись (KK)")
-    caption_en = models.CharField(max_length=255, blank=True, verbose_name="Подпись (EN)")
+    @property
+    def caption(self): return self.get_tr('caption')
 
-    def __str__(self):
-        return f"Изображение для {self.project.title_ru}"
+    def __str__(self): return f"Img: {self.project.title_ru}"
 
-    class Meta:
-        verbose_name = "Изображение результата"
-        verbose_name_plural = "Изображения результатов"
+    class Meta: verbose_name = "Изображение результата"; verbose_name_plural = "Изображения результатов"
 
 
-class News(models.Model):
+class News(TranslatableModel):
+
+    CATEGORY_CHOICES = [
+        ('events', 'События'),
+        ('research', 'Исследования'),
+        ('partnership', 'Партнерство'),
+        ('other', 'Другое'),
+    ]
+
     title_ru = models.CharField(max_length=200, verbose_name="Заголовок (RU)")
     title_kk = models.CharField(max_length=200, verbose_name="Заголовок (KK)", blank=True)
     title_en = models.CharField(max_length=200, verbose_name="Заголовок (EN)", blank=True)
 
-    slug = models.SlugField(max_length=200, unique=True, verbose_name="URL-адрес (слаг)")
-    image = models.ImageField(upload_to='news_images/', verbose_name="Изображение")
-    category = models.CharField(max_length=50, verbose_name="Категория")
+    slug = models.SlugField(max_length=200, unique=True)
+    image = models.ImageField(upload_to='news_images/')
+
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default='events')
 
     content_ru = RichTextUploadingField(verbose_name="Содержание (RU)")
     content_kk = RichTextUploadingField(verbose_name="Содержание (KK)", blank=True)
     content_en = RichTextUploadingField(verbose_name="Содержание (EN)", blank=True)
 
-    published_date = models.DateField(verbose_name="Дата публикации")
-    project = models.ForeignKey(
-        Project,
-        related_name='news',
-        on_delete=models.SET_NULL,
-        null=True, blank=True,
-        verbose_name="Связанный проект"
-    )
-    author_name = models.CharField(max_length=100, blank=True, null=True, verbose_name="Имя автора")
-    keywords = models.CharField(max_length=200, blank=True, verbose_name="Ключевые слова (через запятую)")
-    updated_at = models.DateTimeField(auto_now=True, verbose_name="Последнее обновление")
+    published_date = models.DateField()
+    project = models.ForeignKey(Project, related_name='news', on_delete=models.SET_NULL, null=True, blank=True)
+    author_name = models.CharField(max_length=100, blank=True, null=True)
+    keywords = models.CharField(max_length=200, blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return self.title_ru
+    @property
+    def title(self): return self.get_tr('title')
 
-    def get_absolute_url(self):
-        return reverse('news_detail', kwargs={'slug': self.slug})
+    @property
+    def content(self): return self.get_tr('content')
 
-    class Meta:
-        verbose_name = "Новость"
-        verbose_name_plural = "Новости"
-        ordering = ['-published_date']
+    def __str__(self): return self.title_ru
+
+    def get_absolute_url(self): return reverse('news_detail', kwargs={'slug': self.slug})
+
+    class Meta: verbose_name = "Новость"; verbose_name_plural = "Новости"; ordering = ['-published_date']
 
 
-class Service(models.Model):
-    title_ru = models.CharField(max_length=100, verbose_name="Название услуги (RU)")
-    title_kk = models.CharField(max_length=100, verbose_name="Название услуги (KK)", blank=True)
-    title_en = models.CharField(max_length=100, verbose_name="Название услуги (EN)", blank=True)
+class Service(TranslatableModel):
+    title_ru = models.CharField(max_length=100)
+    title_kk = models.CharField(max_length=100, blank=True)
+    title_en = models.CharField(max_length=100, blank=True)
 
-    description_ru = models.TextField(verbose_name="Краткое описание (RU)")
-    description_kk = models.TextField(verbose_name="Краткое описание (KK)", blank=True)
-    description_en = models.TextField(verbose_name="Краткое описание (EN)", blank=True)
+    description_ru = models.TextField()
+    description_kk = models.TextField(blank=True)
+    description_en = models.TextField(blank=True)
 
-    icon_class = models.CharField(max_length=100, verbose_name="CSS класс иконки", help_text="Например: 'fas fa-cogs'",
-                                  blank=True)
+    icon_class = models.CharField(max_length=100, blank=True)
+    order = models.PositiveIntegerField(default=0)
 
-    order = models.PositiveIntegerField(default=0, verbose_name="Порядок сортировки")
+    @property
+    def title(self): return self.get_tr('title')
 
-    class Meta:
-        verbose_name = "Услуга"
-        verbose_name_plural = "Услуги"
-        ordering = ['order']
+    @property
+    def description(self): return self.get_tr('description')
 
-    def __str__(self):
-        return self.title_ru
+    class Meta: verbose_name = "Услуга"; verbose_name_plural = "Услуги"; ordering = ['order']
+
+    def __str__(self): return self.title_ru

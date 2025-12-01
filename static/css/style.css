@@ -122,3 +122,50 @@ body {
     from { box-shadow: 0 0 20px rgba(27, 75, 130, 0.3); }
     to { box-shadow: 0 0 30px rgba(27, 75, 130, 0.6); }
 }
+
+.language-switcher {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 2px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.lang-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    padding: 4px 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.lang-btn:hover {
+    color: white;
+}
+
+.lang-btn.active {
+    background-color: white;
+    color: #1B4B82;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#mobile-menu-panel .language-switcher {
+    border-color: rgba(255, 255, 255, 0.3);
+    display: inline-flex;
+}
+
+#mobile-menu-panel .lang-btn {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1rem;
+    padding: 8px 16px;
+}
+
+#mobile-menu-panel .lang-btn.active {
+    background-color: white;
+    color: #1B4B82;
+}

@@ -1,54 +1,71 @@
-// /static/js/script.js
-
 document.addEventListener('DOMContentLoaded', function () {
-
     const navbar = document.getElementById('navbar');
-    const mobileMenuButton = document.getElementById('mobile-menu-button');
-    const mobileMenuPanel = document.getElementById('mobile-menu-panel');
-    const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
-    const mobileMenuCloseButton = document.getElementById('mobile-menu-close-button');
+    const logo = document.getElementById('logo-img');
     const mobileMenuIcon = document.getElementById('mobile-menu-icon');
 
-    if (navbar) {
-        const logo = document.getElementById('logo-img');
+    const gradientClasses = ['bg-gradient-to-r', 'from-digitalem-blue', 'via-digitalem-accent', 'to-digitalem-light'];
+
+    if (navbar && logo) {
         const logoWhite = logo.getAttribute('data-logo-white');
         const logoRgb = logo.getAttribute('data-logo-rgb');
-        const navLinks = navbar.querySelectorAll('.nav-link');
-        const mobileNavLinks = mobileMenuPanel.querySelectorAll('.mobile-nav-link');
-        const mobileMenuLogo = mobileMenuPanel.querySelector('.logo-text');
+
+        const navLinks = navbar.querySelectorAll('.hidden.md\\:flex a');
+        const langButtons = navbar.querySelectorAll('button[name="language"]');
 
         const updateNavbar = () => {
-            const isScrolled = window.scrollY > 50;
+            const isScrolled = window.scrollY > 20;
 
-            navbar.classList.toggle('bg-white', isScrolled);
-            navbar.classList.toggle('shadow-md', isScrolled);
-            navbar.classList.toggle('gradient-bg', !isScrolled);
-            logo.src = isScrolled ? logoRgb : logoWhite;
+            if (isScrolled) {
+                navbar.classList.remove(...gradientClasses);
+                navbar.classList.add('bg-white', 'shadow-md');
 
-            navLinks.forEach(link => {
-                link.classList.toggle('text-gray-800', isScrolled);
-                link.classList.toggle('text-white', !isScrolled);
-            });
+                if (logoRgb) logo.src = logoRgb;
 
-            if (mobileMenuIcon) {
-                mobileMenuIcon.classList.toggle('text-gray-800', isScrolled);
-                mobileMenuIcon.classList.toggle('text-white', !isScrolled);
-            }
+                navLinks.forEach(link => {
+                    link.classList.remove('text-white', 'hover:text-blue-200');
+                    link.classList.add('text-digitalem-navy', 'hover:text-digitalem-accent');
+                });
 
-            if (mobileMenuPanel) {
-                mobileMenuPanel.classList.toggle('gradient-bg', isScrolled);
-                mobileMenuPanel.classList.toggle('text-white', isScrolled);
-                mobileMenuPanel.classList.toggle('bg-white', !isScrolled);
-                mobileMenuPanel.classList.toggle('text-digitalem-navy', !isScrolled);
-
-                if (mobileMenuLogo) {
-                    mobileMenuLogo.classList.toggle('logo-text-inverted', isScrolled);
+                if (mobileMenuIcon) {
+                    mobileMenuIcon.classList.remove('text-white');
+                    mobileMenuIcon.classList.add('text-digitalem-navy');
                 }
 
-                mobileNavLinks.forEach(link => {
-                    link.classList.toggle('text-white', isScrolled);
-                    link.classList.toggle('hover:text-blue-200', isScrolled);
-                    link.classList.toggle('hover:text-digitalem-blue', !isScrolled);
+                langButtons.forEach(btn => {
+                    if (!btn.classList.contains('bg-white')) {
+                        btn.classList.remove('text-white', 'hover:bg-white/20');
+                        btn.classList.add('text-gray-600', 'hover:bg-gray-100');
+                    } else {
+                        btn.classList.remove('bg-white', 'text-digitalem-blue');
+                        btn.classList.add('bg-digitalem-blue', 'text-white');
+                    }
+                });
+
+            } else {
+                navbar.classList.remove('bg-white', 'shadow-md');
+                navbar.classList.add(...gradientClasses);
+
+                if (logoWhite) logo.src = logoWhite;
+
+                navLinks.forEach(link => {
+                    link.classList.remove('text-digitalem-navy', 'hover:text-digitalem-accent');
+                    link.classList.add('text-white', 'hover:text-blue-200');
+                });
+
+                if (mobileMenuIcon) {
+                    mobileMenuIcon.classList.remove('text-digitalem-navy');
+                    mobileMenuIcon.classList.add('text-white');
+                }
+
+                langButtons.forEach(btn => {
+                    if (btn.classList.contains('text-gray-600')) {
+                        btn.classList.remove('text-gray-600', 'hover:bg-gray-100');
+                        btn.classList.add('text-white', 'hover:bg-white/20');
+                    }
+                    if (btn.classList.contains('bg-digitalem-blue')) {
+                        btn.classList.remove('bg-digitalem-blue', 'text-white');
+                        btn.classList.add('bg-white', 'text-digitalem-blue');
+                    }
                 });
             }
         };
@@ -57,10 +74,16 @@ document.addEventListener('DOMContentLoaded', function () {
         window.addEventListener('scroll', updateNavbar);
     }
 
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenuPanel = document.getElementById('mobile-menu-panel');
+    const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+    const mobileMenuCloseButton = document.getElementById('mobile-menu-close-button');
+
     const openMenu = () => {
         if (mobileMenuPanel && mobileMenuOverlay) {
             mobileMenuPanel.classList.remove('translate-x-full');
             mobileMenuOverlay.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
         }
     };
 
@@ -68,6 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (mobileMenuPanel && mobileMenuOverlay) {
             mobileMenuPanel.classList.add('translate-x-full');
             mobileMenuOverlay.classList.add('hidden');
+            document.body.style.overflow = '';
         }
     };
 
@@ -81,6 +105,24 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    const showDetailsBtn = document.getElementById('show-details-btn');
+    const hideDetailsBtn = document.getElementById('hide-details-btn');
+    const detailedInfoBlock = document.getElementById('detailed-info-block');
+
+    if (showDetailsBtn && detailedInfoBlock) {
+        showDetailsBtn.addEventListener('click', function() {
+            detailedInfoBlock.classList.remove('hidden');
+            detailedInfoBlock.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    }
+
+    if (hideDetailsBtn && detailedInfoBlock) {
+        hideDetailsBtn.addEventListener('click', function() {
+            detailedInfoBlock.classList.add('hidden');
+            showDetailsBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+    }
+
     const contactForm = document.getElementById('contact-form');
     if (contactForm) {
         contactForm.addEventListener('submit', async function (event) {
@@ -88,8 +130,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const submitBtn = this.querySelector('button[type="submit"]');
             const submitText = submitBtn.querySelector('.submit-text');
+            const originalText = submitText.textContent;
+            
             submitBtn.disabled = true;
-            submitText.textContent = 'Отправка...';
+            submitText.textContent = '...';
 
             const formData = new FormData(this);
 
@@ -106,14 +150,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     showNotification('Сообщение успешно отправлено!', 'success');
                     this.reset();
                 } else {
-                    throw new Error(result.error || 'Произошла ошибка на сервере.');
+                    throw new Error(result.error || 'Ошибка отправки.');
                 }
             } catch (error) {
                 console.error(error);
-                showNotification(error.message, 'error');
+                showNotification('Ошибка связи с сервером', 'error');
             } finally {
                 submitBtn.disabled = false;
-                submitText.textContent = 'Отправить сообщение';
+                submitText.textContent = originalText;
             }
         });
     }
@@ -122,27 +166,40 @@ document.addEventListener('DOMContentLoaded', function () {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('animate-fade-in-up');
+                observer.unobserve(entry.target);
             }
         });
     }, { threshold: 0.1 });
+
     document.querySelectorAll('section').forEach(section => {
         observer.observe(section);
     });
 
     function showNotification(message, type = 'success') {
-        const existingNotification = document.querySelector('.notification');
-        if (existingNotification) {
-            existingNotification.remove();
-        }
+        const existing = document.querySelector('.notification');
+        if (existing) existing.remove();
+
         const notification = document.createElement('div');
-        notification.className = `notification ${type}`;
-        const icon = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-triangle';
-        notification.innerHTML = `<i class="${icon} icon"></i><span>${message}</span>`;
+        notification.className = `notification ${type} fixed top-24 right-5 p-4 rounded-xl text-white font-medium z-50 transform translate-x-full transition-all duration-300 shadow-2xl flex items-center max-w-sm`;
+
+        if (type === 'success') {
+            notification.classList.add('bg-emerald-500', 'border', 'border-emerald-400');
+        } else {
+            notification.classList.add('bg-red-500', 'border', 'border-red-400');
+        }
+
+        const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+        notification.innerHTML = `<i class="fas ${icon} mr-3 text-xl"></i><span>${message}</span>`;
+        
         document.body.appendChild(notification);
-        setTimeout(() => { notification.classList.add('show'); }, 100);
+
+        requestAnimationFrame(() => {
+            notification.classList.remove('translate-x-full');
+        });
+
         setTimeout(() => {
-            notification.classList.remove('show');
-            setTimeout(() => { notification.remove(); }, 500);
+            notification.classList.add('translate-x-full', 'opacity-0');
+            setTimeout(() => notification.remove(), 300);
         }, 3000);
     }
 
@@ -160,5 +217,4 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         return cookieValue;
     }
-
-}); // <-- Конец ЕДИНОГО главного обработчика
+});
