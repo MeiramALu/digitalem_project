@@ -101,7 +101,7 @@
         {% block content %}
         {% endblock %}
     </main>
-    <section id="contact" class="py-20 bg-digitalem-navy text-white"> {# <-- ИЗМЕНЕН ФОН #}
+    <section id="contact" class="py-20 bg-digitalem-navy text-white"> 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
                 <h2 class="text-3xl md:text-4xl section-title mb-4 text-white">Свяжитесь с нами</h2>
@@ -134,9 +134,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="bg-digitalem-blue/30 rounded-2xl p-8"> {# <-- Стиль формы изменен для соответствия скриншоту #}
+                <div class="bg-digitalem-blue/30 rounded-2xl p-8"> 
                     <h3 class="text-2xl font-bold mb-6 text-white">Отправить сообщение</h3>
                     <form id="contact-form" class="space-y-6">
+                        {% csrf_token %}
                         <div class="grid md:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-medium mb-2 text-white">Имя *</label>

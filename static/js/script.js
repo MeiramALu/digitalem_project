@@ -3,7 +3,9 @@
 document.addEventListener('DOMContentLoaded', function () {
 
     const navbar = document.getElementById('navbar');
+    console.log("Скрипт запущен, ищу элементы мобильного меню...");
     const mobileMenuButton = document.getElementById('mobile-menu-button');
+    console.log("Результат поиска кнопки:", mobileMenuButton);
     const mobileMenuPanel = document.getElementById('mobile-menu-panel');
     const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
     const mobileMenuCloseButton = document.getElementById('mobile-menu-close-button');
@@ -118,6 +120,29 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    console.log("Ищу кнопку 'Подробнее' и связанный с ней блок...");
+
+    const showBtn = document.getElementById('show-details-btn');
+    console.log("Результат поиска кнопки 'Подробнее':", showBtn);
+
+    const hideBtn = document.getElementById('hide-details-btn');
+    console.log("Результат поиска кнопки 'Скрыть':", hideBtn);
+
+    const detailsBlock = document.getElementById('detailed-info-block');
+    console.log("Результат поиска блока с деталями:", detailsBlock);
+
+    if (showBtn && detailsBlock) {
+        showBtn.addEventListener('click', function() {
+            detailsBlock.classList.remove('hidden');
+            detailsBlock.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    }
+
+    if (hideBtn && detailsBlock) {
+        hideBtn.addEventListener('click', function() {
+            detailsBlock.classList.add('hidden');
+        });
+    }
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {

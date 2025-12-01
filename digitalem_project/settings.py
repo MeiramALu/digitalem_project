@@ -7,7 +7,7 @@ SECRET_KEY = 'django-insecure-=-3h%fzehkp_&!sb8t5n7xspxro)e1axgf07cu5tuzf(&cqxos
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['digitalem.kz']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
