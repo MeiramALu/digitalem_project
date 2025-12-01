@@ -1,7 +1,8 @@
 {% extends 'main/base.html' %}
 {% load static %}
+{% load i18n %}
 
-{% block title %}{{ news_item.title }} - Новости DIGITALEM{% endblock %}
+{% block title %}{{ news_item.title }} - {% trans "Новости DIGITALEM" %}{% endblock %}
 
 {% block content %}
 <section class="bg-gray-50 pt-32 pb-20 min-h-screen">
@@ -13,7 +14,7 @@
 
             <div class="flex items-center justify-center space-x-6 mt-6 text-gray-500 font-light">
                 <span>
-                    <i class="far fa-calendar-alt mr-2"></i>{{ news_item.published_date|date:"d F Y" }} г.
+                    <i class="far fa-calendar-alt mr-2"></i>{{ news_item.published_date|date:"d F Y" }} {% trans "г." %}
                 </span>
                 {% if news_item.author_name %}
                 <span>
@@ -22,26 +23,30 @@
                 {% endif %}
             </div>
         </div>
+
         {% if news_item.image %}
             <img src="{{ news_item.image.url }}" alt="{{ news_item.title }}" class="w-full h-auto rounded-2xl shadow-xl my-12">
         {% endif %}
+
         <div class="bg-white rounded-2xl shadow-xl p-8 md:p-12">
             <div class="prose lg:prose-xl max-w-none text-gray-700 font-light leading-relaxed">
                 {{ news_item.content|safe }}
             </div>
+
             <div class="border-t my-12"></div>
+
             <div class="space-y-8">
-                {# Блок с тегами #}
                 {% if keywords_list %}
                 <div class="flex flex-wrap items-center gap-3">
-                    <span class="font-semibold text-gray-700 flex-shrink-0"><i class="fas fa-tags mr-2"></i>Теги:</span>
+                    <span class="font-semibold text-gray-700 flex-shrink-0"><i class="fas fa-tags mr-2"></i>{% trans "Теги:" %}</span>
                     {% for keyword in keywords_list %}
                         <span class="bg-gray-100 text-gray-600 text-xs font-medium px-3 py-1 rounded-full hover:bg-gray-200 transition-colors">{{ keyword }}</span>
                     {% endfor %}
                 </div>
                 {% endif %}
+
                 <div class="flex flex-wrap items-center gap-4">
-                    <span class="font-semibold text-gray-700 flex-shrink-0"><i class="fas fa-share-alt mr-2"></i>Поделиться:</span>
+                    <span class="font-semibold text-gray-700 flex-shrink-0"><i class="fas fa-share-alt mr-2"></i>{% trans "Поделиться:" %}</span>
                     <div class="flex gap-2">
                         <a href="https://t.me/share/url?url={{ request.build_absolute_uri }}&text={{ news_item.title|urlencode }}" target="_blank" class="w-10 h-10 flex items-center justify-center rounded-full bg-sky-500 text-white hover:bg-sky-600 transition-all transform hover:scale-110">
                             <i class="fab fa-telegram-plane"></i>
@@ -58,10 +63,11 @@
                     </div>
                 </div>
             </div>
+
             <div class="text-center mt-12 border-t pt-8">
                 <a href="{% url 'news_list' %}" class="inline-flex items-center text-digitalem-blue font-semibold hover:underline">
                     <i class="fas fa-arrow-left mr-2"></i>
-                    <span>Вернуться ко всем новостям</span>
+                    <span>{% trans "Вернуться ко всем новостям" %}</span>
                 </a>
             </div>
         </div>

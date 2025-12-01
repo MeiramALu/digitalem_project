@@ -1,0 +1,310 @@
+# English translations for DIGITALEM project.
+msgid ""
+msgstr ""
+"Project-Id-Version: DIGITALEM 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-29 17:13+0500\n"
+"PO-Revision-Date: 2025-11-29 17:45+0500\n"
+"Last-Translator: \n"
+"Language-Team: English\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Russian"
+msgstr "Russian"
+
+msgid "Kazakh"
+msgstr "Kazakh"
+
+msgid "English"
+msgstr "English"
+
+msgid "Разработка IT-продуктов, IoT и машинное обучение"
+msgstr "IT Product Development, IoT, and Machine Learning"
+
+msgid "DIGITALEM - полный цикл разработки IT-продуктов: научные исследования, технические проекты и коммерциализация."
+msgstr "DIGITALEM - full cycle IT product development: scientific research, technical projects, and commercialization."
+
+msgid "Главная"
+msgstr "Home"
+
+msgid "Проекты"
+msgstr "Projects"
+
+msgid "Команда"
+msgstr "Team"
+
+msgid "Услуги"
+msgstr "Services"
+
+msgid "Новости"
+msgstr "News"
+
+msgid "Контакты"
+msgstr "Contacts"
+
+msgid "Меню"
+msgstr "Menu"
+
+msgid "Выберите язык"
+msgstr "Select language"
+
+msgid "Свяжитесь с нами"
+msgstr "Contact Us"
+
+msgid "Готовы обсудить ваш проект или задать вопросы?"
+msgstr "Ready to discuss your project or have questions?"
+
+msgid "Контактная информация"
+msgstr "Contact Information"
+
+msgid "Адрес"
+msgstr "Address"
+
+msgid "050042, г. Алматы, Ауэзовский район"
+msgstr "050042, Almaty city, Auezov district"
+
+msgid "ул. Жандосова, д. 150/1, кв. 76"
+msgstr "Zhandosov st., 150/1, apt. 76"
+
+msgid "Телефон"
+msgstr "Phone"
+
+msgid "Регистрация"
+msgstr "Registration"
+
+msgid "БИН"
+msgstr "BIN"
+
+msgid "Отправить сообщение"
+msgstr "Send message"
+
+msgid "Имя"
+msgstr "Name"
+
+msgid "Ваше имя"
+msgstr "Your name"
+
+msgid "Тема"
+msgstr "Subject"
+
+msgid "Тема сообщения"
+msgstr "Message subject"
+
+msgid "Сообщение"
+msgstr "Message"
+
+msgid "Расскажите о вашем проекте или вопросе..."
+msgstr "Tell us about your project or question..."
+
+msgid "Все права защищены."
+msgstr "All rights reserved."
+
+msgid "Полный цикл разработки: научные исследования, технические проекты и успешная коммерциализация IT-продуктов"
+msgstr "Full development cycle: scientific research, technical projects and successful commercialization of IT products"
+
+msgid "Наши проекты"
+msgstr "Our Projects"
+
+msgid "О нас"
+msgstr "About Us"
+
+msgid "5+ лет опыта"
+msgstr "5+ years of experience"
+
+msgid "В сфере с 2019 года"
+msgstr "In the field since 2019"
+
+msgid "Научные проекты"
+msgstr "Scientific Projects"
+
+msgid "Исследования и разработка"
+msgstr "Research and Development"
+
+msgid "Коммерциализация"
+msgstr "Commercialization"
+
+msgid "От идеи до продажи"
+msgstr "From idea to sale"
+
+msgid "IT специализация"
+msgstr "IT Specialization"
+
+msgid "Направления деятельности"
+msgstr "Activities"
+
+msgid "Инновационные решения, которые меняют будущее"
+msgstr "Innovative solutions that change the future"
+
+msgid "Научные проекты и разработки"
+msgstr "Scientific Projects and R&D"
+
+msgid "Фундаментальные исследования и разработка новых алгоритмов в области ИИ и IoT."
+msgstr "Fundamental research and development of new algorithms in AI and IoT."
+
+msgid "Проекты в разработке"
+msgstr "Projects in Development"
+
+msgid "Коммерциализационные проекты и разработки"
+msgstr "Commercialization Projects and Development"
+
+msgid "Активные проекты на стадии прототипирования и создания MVP (минимально жизнеспособного продукта)."
+msgstr "Active projects at the prototyping and MVP (Minimum Viable Product) creation stage."
+
+msgid "Готовые технологии и масштабирование решений для наших клиентов и партнеров."
+msgstr "Ready-made technologies and scaling of solutions for our clients and partners."
+
+msgid "Посмотреть все проекты"
+msgstr "View all projects"
+
+msgid "Наша команда"
+msgstr "Our Team"
+
+msgid "Эксперты с многолетним опытом в IT и инновациях"
+msgstr "Experts with many years of experience in IT and innovation"
+
+msgid "Фотография"
+msgstr "Photo"
+
+msgid "Посмотреть всю команду"
+msgstr "View all team"
+
+msgid "Наши услуги"
+msgstr "Our Services"
+
+msgid "Предоставляем комплексные решения для вашего бизнеса"
+msgstr "We provide comprehensive solutions for your business"
+
+msgid "Раздел с услугами в данный момент наполняется."
+msgstr "The services section is currently being updated."
+
+msgid "Последние новости"
+msgstr "Latest News"
+
+msgid "Будьте в курсе наших достижений, исследований и событий"
+msgstr "Stay up to date with our achievements, research and events"
+
+msgid "Посмотреть все новости"
+msgstr "View all news"
+
+msgid "Выберите направление, чтобы увидеть наши разработки и инновационные решения."
+msgstr "Choose a direction to see our developments and innovative solutions."
+
+msgid "Посмотреть проекты"
+msgstr "View Projects"
+
+msgid "Проекты скоро будут добавлены. Следите за обновлениями!"
+msgstr "Projects will be added soon. Stay tuned!"
+
+msgid "Подробнее о проекте"
+msgstr "More about the project"
+
+msgid "Перейти"
+msgstr "Visit"
+
+msgid "Подробнее"
+msgstr "Details"
+
+msgid "Технологический стек"
+msgstr "Tech Stack"
+
+msgid "Ключевые слова"
+msgstr "Keywords"
+
+msgid "Дополнительная информация"
+msgstr "Additional Information"
+
+msgid "Команда проекта"
+msgstr "Project Team"
+
+msgid "Эксперты, которые работали над этим решением"
+msgstr "Experts who worked on this solution"
+
+msgid "Информация о команде проекта скоро появится."
+msgstr "Project team information coming soon."
+
+msgid "Задача проекта"
+msgstr "Project Task"
+
+msgid "Результаты проекта"
+msgstr "Project Results"
+
+msgid "Материалы проекта"
+msgstr "Project Materials"
+
+msgid "Научные статьи"
+msgstr "Scientific Articles"
+
+msgid "Читать источник"
+msgstr "Read source"
+
+msgid "Новости проекта"
+msgstr "Project News"
+
+msgid "Познакомьтесь с экспертами, которые стоят за нашими инновациями"
+msgstr "Meet the experts behind our innovations"
+
+msgid "Информация о команде скоро появится."
+msgstr "Team information coming soon."
+
+msgid "Участие в проектах"
+msgstr "Project Participation"
+
+msgid "Биография"
+msgstr "Biography"
+
+msgid "Статьи и публикации"
+msgstr "Articles and Publications"
+
+msgid "Новости DIGITALEM"
+msgstr "DIGITALEM News"
+
+msgid "г."
+msgstr "y."
+
+msgid "Теги:"
+msgstr "Tags:"
+
+msgid "Поделиться:"
+msgstr "Share:"
+
+msgid "Вернуться ко всем новостям"
+msgstr "Back to all news"
+
+msgid "Все новости"
+msgstr "All News"
+
+msgid "Наши достижения, исследования и события"
+msgstr "Our achievements, research, and events"
+
+msgid "Новостей пока нет."
+msgstr "No news yet."
+
+# --- VIEWS.PY & MODELS ---
+msgid "Научные исследования"
+msgstr "Scientific Research"
+
+msgid "Все поля обязательны для заполнения."
+msgstr "All fields are required."
+
+msgid "Неверный метод запроса."
+msgstr "Invalid request method."
+
+msgid "События"
+msgstr "Events"
+
+msgid "Исследования"
+msgstr "Research"
+
+msgid "Партнерство"
+msgstr "Partnership"
+
+msgid "Другое"
+msgstr "Other"
+
+
+msgid "Связаться с нами"
+msgstr "Contact us"

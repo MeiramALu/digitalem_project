@@ -1,14 +1,14 @@
-# main/views.py
-
 import asyncio
 import telegram
 from django.shortcuts import render, get_object_or_404
+from django.utils.translation import gettext as _
 from .models import TeamMember, Project, News, Service
 from django.http import JsonResponse
 from django.conf import settings
 
+
 def index(request):
-    team_members = TeamMember.objects.all()[:6]
+    team_members = TeamMember.objects.filter(is_visible=True)[:6]
     latest_news = News.objects.all()[:3]
     services = Service.objects.all()[:4]
     context = {
@@ -20,7 +20,7 @@ def index(request):
 
 
 def team_list(request):
-    all_team_members = TeamMember.objects.all()
+    all_team_members = TeamMember.objects.filter(is_visible=True)
     context = {
         'all_team': all_team_members
     }
@@ -33,11 +33,12 @@ def labs(request):
 
 def project_list(request, category_slug):
     category_map = {
-        'research': 'Научные исследования',
-        'development': 'Проекты в разработке',
-        'commercial': 'Коммерциализация'
+        'research': _('Научные исследования'),
+        'development': _('Проекты в разработке'),
+        'commercial': _('Коммерциализация')
     }
-    category_name = category_map.get(category_slug, 'Проекты')
+    category_name = category_map.get(category_slug, _('Проекты'))
+
     projects = Project.objects.filter(category=category_slug)
     context = {
         'projects': projects,
@@ -48,10 +49,13 @@ def project_list(request, category_slug):
 
 def project_detail(request, slug):
     project = get_object_or_404(Project, slug=slug)
+
     team_members = project.team.all()
+
     keywords_list = []
     if project.keywords:
         keywords_list = [keyword.strip() for keyword in project.keywords.split(',')]
+
     context = {
         'project': project,
         'team_members': team_members,
@@ -77,6 +81,7 @@ def news_list(request):
     }
     return render(request, 'main/news_list.html', context)
 
+
 def news_detail(request, slug):
     news_item = get_object_or_404(News, slug=slug)
     keywords_list = []
@@ -88,6 +93,7 @@ def news_detail(request, slug):
     }
     return render(request, 'main/news_detail.html', context)
 
+
 def send_telegram_message(request):
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -96,7 +102,7 @@ def send_telegram_message(request):
         message_body = request.POST.get('message')
 
         if not all([name, phone, email, message_body]):
-            return JsonResponse({'success': False, 'error': 'Все поля обязательны для заполнения.'})
+            return JsonResponse({'success': False, 'error': _('Все поля обязательны для заполнения.')})
 
         token = settings.TELEGRAM_BOT_TOKEN
         chat_id = settings.TELEGRAM_CHAT_ID
@@ -119,9 +125,8 @@ def send_telegram_message(request):
                 )
                 return JsonResponse({'success': True})
             except telegram.error.TelegramError as e:
-
-                return JsonResponse({'success': False, 'error': f'Ошибка Telegram: {e.message}'})
+                return JsonResponse({'success': False, 'error': f'Telegram Error: {e.message}'})
 
         return asyncio.run(send())
 
-    return JsonResponse({'success': False, 'error': 'Неверный метод запроса.'})
+    return JsonResponse({'success': False, 'error': _('Неверный метод запроса.')})
