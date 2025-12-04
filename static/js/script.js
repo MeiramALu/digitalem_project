@@ -12,6 +12,13 @@ document.addEventListener('DOMContentLoaded', function () {
         const navLinks = navbar.querySelectorAll('.hidden.md\\:flex a');
         const langButtons = navbar.querySelectorAll('button[name="language"]');
 
+        let activeLangBtn = null;
+        langButtons.forEach(btn => {
+            if (btn.classList.contains('bg-white')) {
+                activeLangBtn = btn;
+            }
+        });
+
         const updateNavbar = () => {
             const isScrolled = window.scrollY > 20;
 
@@ -32,12 +39,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 langButtons.forEach(btn => {
-                    if (!btn.classList.contains('bg-white')) {
+                    if (btn === activeLangBtn) {
+                        btn.classList.remove('bg-white', 'text-digitalem-blue', 'text-gray-600');
+                        btn.classList.add('bg-digitalem-blue', 'text-white');
+                    } else {
                         btn.classList.remove('text-white', 'hover:bg-white/20');
                         btn.classList.add('text-gray-600', 'hover:bg-gray-100');
-                    } else {
-                        btn.classList.remove('bg-white', 'text-digitalem-blue');
-                        btn.classList.add('bg-digitalem-blue', 'text-white');
                     }
                 });
 
@@ -58,13 +65,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 langButtons.forEach(btn => {
-                    if (btn.classList.contains('text-gray-600')) {
+                    if (btn === activeLangBtn) {
+                        btn.classList.remove('bg-digitalem-blue', 'text-white', 'text-gray-600');
+                        btn.classList.add('bg-white', 'text-digitalem-blue');
+                    } else {
                         btn.classList.remove('text-gray-600', 'hover:bg-gray-100');
                         btn.classList.add('text-white', 'hover:bg-white/20');
-                    }
-                    if (btn.classList.contains('bg-digitalem-blue')) {
-                        btn.classList.remove('bg-digitalem-blue', 'text-white');
-                        btn.classList.add('bg-white', 'text-digitalem-blue');
                     }
                 });
             }
@@ -119,7 +125,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (hideDetailsBtn && detailedInfoBlock) {
         hideDetailsBtn.addEventListener('click', function() {
             detailedInfoBlock.classList.add('hidden');
-            showDetailsBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
         });
     }
 
@@ -127,13 +132,14 @@ document.addEventListener('DOMContentLoaded', function () {
     if (contactForm) {
         contactForm.addEventListener('submit', async function (event) {
             event.preventDefault();
+            console.log('Форма отправляется...');
 
             const submitBtn = this.querySelector('button[type="submit"]');
             const submitText = submitBtn.querySelector('.submit-text');
-            const originalText = submitText.textContent;
-            
+            const originalText = submitText ? submitText.textContent : 'Отправить';
+
             submitBtn.disabled = true;
-            submitText.textContent = '...';
+            if (submitText) submitText.textContent = '...';
 
             const formData = new FormData(this);
 
@@ -145,6 +151,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
 
                 const result = await response.json();
+                console.log('Ответ сервера:', result);
 
                 if (result.success) {
                     showNotification('Сообщение успешно отправлено!', 'success');
@@ -153,38 +160,15 @@ document.addEventListener('DOMContentLoaded', function () {
                     throw new Error(result.error || 'Ошибка отправки.');
                 }
             } catch (error) {
-                console.error(error);
+                console.error('Ошибка:', error);
                 showNotification('Ошибка связи с сервером', 'error');
             } finally {
                 submitBtn.disabled = false;
-                submitText.textContent = originalText;
+                if (submitText) submitText.textContent = originalText;
             }
         });
     }
 
-    console.log("Ищу кнопку 'Подробнее' и связанный с ней блок...");
-
-    const showBtn = document.getElementById('show-details-btn');
-    console.log("Результат поиска кнопки 'Подробнее':", showBtn);
-
-    const hideBtn = document.getElementById('hide-details-btn');
-    console.log("Результат поиска кнопки 'Скрыть':", hideBtn);
-
-    const detailsBlock = document.getElementById('detailed-info-block');
-    console.log("Результат поиска блока с деталями:", detailsBlock);
-
-    if (showBtn && detailsBlock) {
-        showBtn.addEventListener('click', function() {
-            detailsBlock.classList.remove('hidden');
-            detailsBlock.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        });
-    }
-
-    if (hideBtn && detailsBlock) {
-        hideBtn.addEventListener('click', function() {
-            detailsBlock.classList.add('hidden');
-        });
-    }
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -199,29 +183,47 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     function showNotification(message, type = 'success') {
-        const existing = document.querySelector('.notification');
+        console.log('Попытка показать уведомление:', message);
+
+        const existing = document.querySelector('.js-notification-custom');
         if (existing) existing.remove();
 
         const notification = document.createElement('div');
-        notification.className = `notification ${type} fixed top-24 right-5 p-4 rounded-xl text-white font-medium z-50 transform translate-x-full transition-all duration-300 shadow-2xl flex items-center max-w-sm`;
+        notification.className = 'js-notification-custom';
+
+        notification.style.position = 'fixed';
+        notification.style.top = '100px';
+        notification.style.right = '20px';
+        notification.style.zIndex = '2147483647';
+        notification.style.padding = '15px 25px';
+        notification.style.borderRadius = '8px';
+        notification.style.color = '#ffffff';
+        notification.style.fontFamily = 'sans-serif';
+        notification.style.fontWeight = '600';
+        notification.style.boxShadow = '0 10px 15px -3px rgba(0, 0, 0, 0.1)';
+        notification.style.transition = 'transform 0.3s ease-out, opacity 0.3s ease-out';
+        notification.style.transform = 'translateX(120%)';
+        notification.style.display = 'flex';
+        notification.style.alignItems = 'center';
+        notification.style.gap = '10px';
 
         if (type === 'success') {
-            notification.classList.add('bg-emerald-500', 'border', 'border-emerald-400');
+            notification.style.backgroundColor = '#10B981';
+            notification.innerHTML = `<span>✅</span> <span>${message}</span>`;
         } else {
-            notification.classList.add('bg-red-500', 'border', 'border-red-400');
+            notification.style.backgroundColor = '#EF4444';
+            notification.innerHTML = `<span>⚠️</span> <span>${message}</span>`;
         }
 
-        const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
-        notification.innerHTML = `<i class="fas ${icon} mr-3 text-xl"></i><span>${message}</span>`;
-        
         document.body.appendChild(notification);
 
-        requestAnimationFrame(() => {
-            notification.classList.remove('translate-x-full');
-        });
+        setTimeout(() => {
+            notification.style.transform = 'translateX(0)';
+        }, 10);
 
         setTimeout(() => {
-            notification.classList.add('translate-x-full', 'opacity-0');
+            notification.style.opacity = '0';
+            notification.style.transform = 'translateX(120%)';
             setTimeout(() => notification.remove(), 300);
         }, 3000);
     }

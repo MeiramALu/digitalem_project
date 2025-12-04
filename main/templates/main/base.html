@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="icon" type="image/png" href="{% static 'logo/logo_tab_white.png' %}">
+    <link rel="icon" type="image/png" href="{% static 'logo/logo_tab_rgb.png' %}">
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -115,24 +115,25 @@
 
             <hr class="border-white/20">
 
-            <div>
-                <p class="text-sm text-blue-200 mb-4 uppercase tracking-wider font-semibold">{% trans "Выберите язык" %}</p>
-                <form action="{% url 'set_language' %}" method="post" class="flex gap-3">
-                    {% csrf_token %}
-                    <input name="next" type="hidden" value="{{ redirect_to }}">
-                    {% get_available_languages as LANGUAGES %}
-                    {% for lang in LANGUAGES %}
-                        <button type="submit" name="language" value="{{ lang.0 }}"
-                                class="flex-1 py-2 rounded-lg text-sm font-bold border transition-all
-                                {% if lang.0 == LANGUAGE_CODE %}
-                                    bg-white text-digitalem-blue border-white shadow-md
-                                {% else %}
-                                    bg-transparent text-white border-white/40 hover:bg-white/10
-                                {% endif %}">
-                            {{ lang.0|upper }}
-                        </button>
-                    {% endfor %}
-                </form>
+            <div class="text-sm text-blue-200 mb-4 uppercase tracking-wider font-semibold">{% trans "Выберите язык" %}</div>
+            <form action="{% url 'set_language' %}" method="post" class="flex gap-3 group">
+                {% csrf_token %}
+                <input name="next" type="hidden" value="{{ redirect_to }}">
+                {% get_available_languages as LANGUAGES %}
+                {% for lang in LANGUAGES %}
+                    <button type="submit" name="language" value="{{ lang.0 }}"
+                            class="flex-1 py-2 rounded-lg text-sm font-bold border transition-all
+                            {% if lang.0 == LANGUAGE_CODE %}
+                                bg-white text-digitalem-blue border-white shadow-md
+                                group-[.scrolled]:bg-digitalem-blue group-[.scrolled]:text-white
+                            {% else %}
+                                bg-transparent text-white border-white/40 hover:bg-white/10
+                                group-[.scrolled]:text-black group-[.scrolled]:border-black/20
+                            {% endif %}">
+                        {{ lang.0|upper }}
+                    </button>
+                {% endfor %}
+            </form>
             </div>
         </div>
     </div>
@@ -155,14 +156,14 @@
                             <div class="w-12 h-12 bg-digitalem-blue rounded-xl flex items-center justify-center flex-shrink-0"><i class="fas fa-map-marker-alt text-white"></i></div>
                             <div>
                                 <h4 class="font-semibold mb-1 text-white">{% trans "Адрес" %}</h4>
-                                <p class="text-blue-100 font-light">{% trans "050042, г. Алматы, Ауэзовский район" %}<br>{% trans "ул. Жандосова, д. 150/1, кв. 76" %}</p>
+                                <p class="text-blue-100 font-light">{% trans "050042, г. Алматы, Ауэзовский район" %}<br>{% trans "ул. Жандосова, д. 150/1" %}</p>
                             </div>
                         </div>
                         <div class="flex items-start space-x-4">
                             <div class="w-12 h-12 bg-digitalem-blue rounded-xl flex items-center justify-center flex-shrink-0"><i class="fas fa-phone text-white"></i></div>
                             <div>
                                 <h4 class="font-semibold mb-1 text-white">{% trans "Телефон" %}</h4>
-                                <p class="text-blue-100 font-light"><a href="tel:+77071223339" class="hover:text-white transition">+7 (707) 122-33-39</a></p>
+                                <p class="text-blue-100 font-light"><a href="tel:+77071223339" class="hover:text-white transition">+7 (707) 780-08-87</a></p>
                             </div>
                         </div>
                         <div class="flex items-start space-x-4">
@@ -230,5 +231,14 @@
     <script src="{% static 'js/script.js' %}"></script>
     {% block scripts %}
     {% endblock %}
+
+    <a href="#contact"
+       class="fixed bottom-6 right-6 z-50 flex items-center justify-center w-16 h-16 bg-digitalem-blue rounded-full shadow-2xl hover:bg-digitalem-blue hover:scale-110 transition-all duration-300 group focus:outline-none focus:ring-4 focus:ring-blue-300"
+       aria-label="{% trans 'Написать нам' %}">
+        <i class="fas fa-comment-dots text-2xl text-white"></i>
+        <span class="absolute inline-flex h-full w-full rounded-full bg-digitalem-light opacity-20 animate-ping -z-10"
+              style="animation-duration: 2s;">
+        </span>
+    </a>
 </body>
 </html>
